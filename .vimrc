@@ -51,11 +51,8 @@ set ruler
 " Display an incomplete command in the lower right corner of the Vim window
 set showcmd
 
-" have the mouse enabled all the time:
-"set mouse=a
+set bs=2
 
-" By default, vim doesn't let the cursor stray beyond the defined text. This 
-" setting allows the cursor to freely roam anywhere it likes in command mode.
 " It feels weird at first but is quite useful.
 "set virtualedit=all
 " tab navigation like firefox
@@ -65,3 +62,9 @@ set showcmd
 :map <C-S-tab> :tabprevious<CR>
 :map <C-tab> :tabnext<CR>
 :map <C-t> :tabnew<CR>
+
+if has("gui_running")
+    set background=light
+    colorscheme solarized
+    set guifont=Consolas:h11
+endif
