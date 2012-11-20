@@ -1,0 +1,5 @@
+[user]
+	name = Peter Klein
+	email = peter@uytr.org
+[core]
+	editor = vim
