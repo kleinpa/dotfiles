@@ -1,30 +1,4 @@
 
-# git prompt: http://sebastiancelis.com/2009/11/16/zsh-prompt-git-users/
-
-# Autoload zsh functions.
-fpath=(~/.zsh/functions $fpath)
-autoload -U ~/.zsh/functions/*(:t)
-
-# Enable auto-execution of functions
-typeset -ga preexec_functions
-typeset -ga precmd_functions
-typeset -ga chpwd_functions
-
-preexec_functions+='preexec_update_git_vars'
-precmd_functions+='precmd_update_git_vars'
-chpwd_functions+='update_current_git_vars'
-
-# Allow subsitutuion in prompt.
-setopt prompt_subst
-
-# Color Definitions
-C0=$'%{\e[1;33m%}'     # White for [ : ] 
-C1=$'%{\e[1;31m%}'     # Color for name, system, directory
-C2=$'%{\e[0m%}'        # Color for averything after prompt
-
-# Set the prompt.
-PROMPT='$C0%}[$C1%n$C0@$C1%m$C0:$C1%c$C0$(prompt_git_info)$C0]$C2%# '
-
 
 #########################################################
 #                      commonfunc                       #
@@ -217,3 +191,33 @@ if [[ "$TERM" != emacs ]]; then
 [[ "$terminfo[kend]" == "^[O"* ]] && bindkey -M emacs "${terminfo[kend]/O/[}" end-of-line
 fi
 
+# git prompt: http://sebastiancelis.com/2009/11/16/zsh-prompt-git-users/
+
+# Autoload zsh functions.
+fpath=(~/.zsh/functions $fpath)
+autoload -U ~/.zsh/functions/*(:t)
+
+# Enable auto-execution of functions
+typeset -ga preexec_functions
+typeset -ga precmd_functions
+typeset -ga chpwd_functions
+
+preexec_functions+='preexec_update_git_vars'
+precmd_functions+='precmd_update_git_vars'
+chpwd_functions+='update_current_git_vars'
+
+# Allow subsitutuion in prompt.
+setopt prompt_subst
+
+# Color Definitions
+C0=$'%{\e[1;33m%}'     # White for [ : ] 
+C1=$'%{\e[1;31m%}'     # Color for name, system, directory
+C2=$'%{\e[0m%}'        # Color for averything after prompt
+
+if [[ -e ~/.zshrc.local ]]; then
+    source ~/.zshrc.local
+fi
+
+
+# Set the prompt.
+PROMPT='$C0%}[$C1%n$C0@$C1%m$C0:$C1%c$C0$(prompt_git_info)$C0]$C2%# '
