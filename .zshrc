@@ -1,42 +1,36 @@
-#########################################################
-#                         prompt                         #
-#########################################################
-setprompt () {
-    # Need this so the prompt will work.
-    setopt prompt_subst
-    
-    # simple version of my ZSH prompt
-    #RPROMPT=''
-    PROMPT='[%n@%m %c]%# '
-    C0=$'%{\e[1;33m%}'     # White for [ : ] 
-    C1=$'%{\e[1;31m%}'     # Color for name, system, directory
-    C2=$'%{\e[0m%}'        # Color for averything after prompt
 
-#    PROMPT=$'[\e[0;31m%n@%m\e[0m:\e[0;31m%c\e[0m%}]%# '
-    PROMPT='$C0%}[$C1%n$C0@$C1%m$C0:$C1%c$C0]$C2%# '
-#    PROMPT='i.$C0.[%n@%m %c]%# '
-    PS2=''
-}
+# git prompt: http://sebastiancelis.com/2009/11/16/zsh-prompt-git-users/
 
-setprompt
+# Autoload zsh functions.
+fpath=(~/.zsh/functions $fpath)
+autoload -U ~/.zsh/functions/*(:t)
+
+# Enable auto-execution of functions
+typeset -ga preexec_functions
+typeset -ga precmd_functions
+typeset -ga chpwd_functions
+
+preexec_functions+='preexec_update_git_vars'
+precmd_functions+='precmd_update_git_vars'
+chpwd_functions+='update_current_git_vars'
+
+# Allow subsitutuion in prompt.
+setopt prompt_subst
+
+# Color Definitions
+C0=$'%{\e[1;33m%}'     # White for [ : ] 
+C1=$'%{\e[1;31m%}'     # Color for name, system, directory
+C2=$'%{\e[0m%}'        # Color for averything after prompt
+
+# Set the prompt.
+PROMPT='$C0%}[$C1%n$C0@$C1%m$C0:$C1%c$C0$(prompt_git_info)$C0]$C2%# '
+
 
 #########################################################
 #                      commonfunc                       #
 #########################################################
 
 UNAME=$(uname)
-
-makeMeLaugh() {
-  if checkPath fortune; then
-    local FORTUNE
-    if [ -d /opt/local/share/games/fortune/comedy ] || [ -d /usr/share/games/fortune/comedy ]; then
-        FORTUNE=$(fortune -e comedy)
-    else
-        FORTUNE=$(fortune -a)
-    fi
-    echo -e "\n$FORTUNE\n"
-  fi
-}
 
 # helper function to search the $PATH for a given
 # executable.  useful for checks across different
@@ -71,73 +65,12 @@ checkPath() {
     return 1
 }
 
-isiPhone() {
-    if checkPath sw_vers; then
-        [ $(sw_vers | awk '/ProductName/ {print $2}') = "iPhone" ] && return 0
-    fi
-    return 1
-}
-
-# a little function to print the full path to a file.
-fullpath() {
-    local fullpath
-    fullpath=$(pwd)/$1
-    echo $fullpath
-    
-    # on OS X copy it to the clipboard too :)
-    if checkPath pbcopy && [ $UNAME = "Darwin" ]; then
-        echo $fullpath | pbcopy
-    fi
-}
-
-#########################################################
-#                      commonrc                         #
-#########################################################
-# re link all the conf files
-alias qs='~/.dotfiles/create_links.sh'
-
-# shortcut for long descrip checking
-alias py_long_descrip="python2.4 setup.py --long-description"
-# use cat to show the file
-alias descrip_check="py_long_descrip > /tmp/package.rst && rst2html.py /tmp/package.rst /tmp/package.html && cat -n /tmp/package.rst"
-
-# some OS X specific stuff
-##########################
-if [[ $UNAME == "Darwin" ]]; then
-    
-    # set up a path in .profile for TextMate (zsh haterz)
-    echo "export PATH=$PATH" > $HOME/.profile
-
-    # Helpers to see if a python package's long descrip is proper...
-    alias descrip_check="py_long_descrip > /tmp/package.rst && rst2html.py /tmp/package.rst /tmp/package.html && mate /tmp/package.rst"
-    # run the setup.py descrip through docutils, then open it with the default browser
-    alias descrip_check_open="py_long_descrip | rst2html.py > /tmp/foo.html && open file:///tmp/foo.html"
-
-    # iPhone doesn't have a defaults command...yet
-    if checkPath defaults; then
-        # also set up the osx path
-        # (this will overwrite the PATH everytime we open a shell)
-        defaults write $HOME/.MacOSX/environment PATH -string $PATH
-    fi
-
-    # add ports into the $MANPATH
-    export MANPATH=/opt/local/man:$MANPATH
-fi
-
 # processes
 ###########
 # output more lines so that you can grep them
 alias psa='ps axwww'
 # grep through processes
 alias psg='psa | grep -i'
-
-# svn helpers
-#############
-#alias svnps="svn propset svn:externals -F EXTERNALS.txt ."
-#alias svnpsi="svn propset svn:ignore -F IGNORE.txt ."
-
-# zope runs most QA/Staging instances...
-#alias zu='sudo -H -u zope'
 
 # buildout...
 #############
@@ -175,19 +108,6 @@ alias lsa='ll -h'
 # case insensetive searching in less
 alias less='less -I'
 
-# tar
-#####
-# create a tgz archive ignoring some files
-#alias targzc='tar --exclude=".DS_Store" --exclude="*pyc" -zcvf'
-# create a tbz2 archive ignoring some files
-#alias tarbzc='tar --exclude=".DS_Store" --exclude="*pyc" -jcvf'
-# unarchive
-#alias targzx='tar -zxvf'
-#alias tarbzx='tar -xvjf'
-
-# always show all versions of an executable
-#alias which="which -a"
-
 # colors!!!
 ###########
 
@@ -221,15 +141,6 @@ alias less='less -I'
 # Common hashes
 #hash -d L=/var/log
 #hash -d R=/usr/local/etc/rc.d
-
-# OS X specific settings
-if [ $UNAME = "Darwin" ]; then
-    
-    # set up dir hashes
-    #hash -d P=$HOME/sixfeetup/projects
-    #hash -d S=$HOME/Sites
-
-fi
 
 # global aliases
 ################
