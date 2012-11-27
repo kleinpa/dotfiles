@@ -5,3 +5,11 @@
 	editor = vim
 [color]
     ui = true
+[alias]
+    st = status
+    ci = commit
+    br = branch
+    co = checkout
+    df = diff
+    lg = log
+    lgg = log --graph --decorate --pretty=oneline --abbrev-commit --all
