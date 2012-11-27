@@ -6,9 +6,10 @@ FILES="
 .vim
 .gitconfig
 .minttyrc
+.emacs
 "
 
 for f in $FILES
 do
-    ln -fs `dirname $0`/$f ~
+    ln -fs $(realpath `dirname $0`)/$f ~
 done

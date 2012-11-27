@@ -61,7 +61,7 @@ alias mv='mv -i'
 # conditionally set up coloring on different OS types
 if [ $UNAME = "FreeBSD" ] || [ $UNAME = "Darwin" ]; then
    alias ls="ls -GF"
-elif [ $UNAME = "Linux" ]; then
+elif [ $UNAME = "Linux" ] || [[ $UNAME = "CYGWIN"* ]]; then
    alias ls="ls --color=auto -F"
 elif [ $UNAME = 'SunOS' ]; then
    alias ls="ls --color=always -F"
@@ -213,6 +213,7 @@ setopt prompt_subst
 C0=$'%{\e[1;33m%}'     # White for [ : ] 
 C1=$'%{\e[1;31m%}'     # Color for name, system, directory
 C2=$'%{\e[0m%}'        # Color for averything after prompt
+C3=$'%{\e[0;34m%}'     # Color for GIT info
 
 if [[ -e ~/.zshrc.local ]]; then
     source ~/.zshrc.local
@@ -220,4 +221,4 @@ fi
 
 
 # Set the prompt.
-PROMPT='$C0%}[$C1%n$C0@$C1%m$C0:$C1%c$C0$(prompt_git_info)$C0]$C2%# '
+PROMPT='$C0%}[$C1%n$C0@$C1%m$C0:$C1%c$C3$(prompt_git_info)$C0]$C2%# '
