@@ -3,3 +3,5 @@
 	email = peter@uytr.org
 [core]
 	editor = vim
+[color]
+    ui = true
