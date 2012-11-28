@@ -205,6 +205,7 @@ typeset -ga chpwd_functions
 preexec_functions+='preexec_update_git_vars'
 precmd_functions+='precmd_update_git_vars'
 chpwd_functions+='update_current_git_vars'
+update_current_git_vars
 
 # Allow subsitutuion in prompt.
 setopt prompt_subst
