@@ -7,9 +7,14 @@
 (setq explicit-shell-file-name "bash")
 (setq w32-quote-process-args ?\")
 
+;; Colors
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(load-theme 'solarized-light t)
+
 ;; Set the default font and frame size for all frames
+(if window-system (tool-bar-mode 0))
+
 (set-default-font "-*-Consolas-normal-r-*-*-12-90-96-96-c-*-iso8859-1")
-(tool-bar-mode 0)
 (setq initial-frame-alist
   `((top . 0)
     (left . ,(- (/ (display-pixel-width) 2) (* (frame-char-width) 40)))
@@ -109,15 +114,7 @@
 
 ;; Font lock
 (require 'font-lock)
-(setq font-lock-face-attributes
-      ;; Symbol-for-Face Foreground Background Bold Italic Underline
-      '((font-lock-comment-face       "saddlebrown" "oldlace")
-	(font-lock-string-face        "firebrick")
-	(font-lock-keyword-face       "MediumBlue")
-	(font-lock-type-face          "olivedrab")
-	(font-lock-function-name-face "darkmagenta")
-	(font-lock-variable-name-face "maroon4")
-	))
+
 (setq font-lock-maximum-decoration t)
 (global-font-lock-mode t)
 (setq font-lock-global-modes '(not shell-mode))
@@ -127,3 +124,5 @@
 ;; package.el
 (require 'package)
 (package-initialize)
+
+

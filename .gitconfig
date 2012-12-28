@@ -6,10 +6,13 @@
 [color]
     ui = true
 [alias]
+    a = add
+    ai = add --interactive
     st = status
-    ci = commit
-    br = branch
+    c = commit
+    b = branch -vv
     co = checkout
     df = diff
+    wd = diff --word-diff="color"
     lg = log
     lgg = log --graph --decorate --pretty=oneline --abbrev-commit --all
