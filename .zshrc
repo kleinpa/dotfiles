@@ -71,7 +71,7 @@ elif [ $UNAME = 'SunOS' ]; then
 fi
 
 # show me everything
-alias ll='ls -al'
+alias ll='ls -ahl'
 # sort by size
 alias lss='ll -Sr'
 # ll but human readable size
@@ -226,3 +226,8 @@ fi
 
 # Set the prompt.
 PROMPT='$C0%}[$C1%n$C0@$C1%m$C0:$C1%c$C3$(prompt_git_info)$C0]$C2%# '
+
+# Special emacs alias for windows
+if [[ $UNAME = "CYGWIN"* ]]; then
+    alias e='env -u HOME emacsclientw -na runemacs'
+fi

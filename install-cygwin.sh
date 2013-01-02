@@ -7,6 +7,7 @@ FILES="
 .gitconfig
 .minttyrc
 .emacs
+.emacs.d
 "
 
 for f in $FILES

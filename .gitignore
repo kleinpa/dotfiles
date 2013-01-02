@@ -2,3 +2,4 @@
 *~
 *.local*
 .netrwhist
+.emacs.d/server

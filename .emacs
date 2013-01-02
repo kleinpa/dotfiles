@@ -1,11 +1,10 @@
-
 ;; Cygwin settings
-(setq exec-path (cons "c:/cygwin/bin" exec-path))
-(setenv "PATH" (concat "c:\\cygwin\\bin;" (getenv "PATH")))
-(setq process-coding-system-alist '(("bash" . undecided-unix)))
-(setq shell-file-name "bash")
-(setq explicit-shell-file-name "bash")
-(setq w32-quote-process-args ?\")
+;;(setq exec-path (cons "c:/cygwin/bin" exec-path))
+;;(setenv "PATH" (concat "c:\\cygwin\\bin;" (getenv "PATH")))
+;;(setq process-coding-system-alist '(("bash" . undecided-unix)))
+;;(setq shell-file-name "bash")
+;;(setq explicit-shell-file-name "bash")
+;;(setq w32-quote-process-args ?\")
 
 ;; Colors
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
@@ -125,4 +124,6 @@
 (require 'package)
 (package-initialize)
 
+;; Misc personal settings
+(setq vc-follow-symlinks t)
 
