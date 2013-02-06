@@ -5,6 +5,7 @@ FILES="
 .vimrc
 .vim
 .gitconfig
+.gitignore.global
 .minttyrc
 .emacs
 .emacs.d

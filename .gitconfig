@@ -3,6 +3,7 @@
 	email = peter@uytr.org
 [core]
 	editor = vim
+    excludesfile = ~/.gitignore.global
 [color]
     ui = true
 [alias]
