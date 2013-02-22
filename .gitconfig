@@ -17,3 +17,4 @@
     wd = diff --word-diff="color"
     lg = log
     lgg = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    ph = push origin HEAD
