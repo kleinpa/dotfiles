@@ -96,6 +96,7 @@
 
 ;; Indentation stuff
 (defvar c-basic-offset 2)  ; for c++
+(defvar js-indent-level 2) ; for JavaScript
 (defvar standard-indent 2) ; for most things
 (setq c-default-style '((java-mode . "java")
 			(awk-mode . "awk")
