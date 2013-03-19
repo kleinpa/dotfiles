@@ -8,12 +8,17 @@
 
 ;; Colors
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'solarized-light t)
+(load-theme 'solarized-dark t)
 
 ;; Set the default font and frame size for all frames
 (if window-system (tool-bar-mode 0))
+(if window-system (menu-bar-mode 0))
 
-(set-default-font "-*-Consolas-normal-r-*-*-12-90-96-96-c-*-iso8859-1")
+
+;; Must figure out cross-platform font
+;; (set-default-font "-*-Consolas-normal-r-*-*-12-90-96-96-c-*-iso8859-1")
+
+
 (setq initial-frame-alist
   `((top . 0)
     (left . ,(- (/ (display-pixel-width) 2) (* (frame-char-width) 40)))
@@ -81,6 +86,11 @@
   (function
    (lambda ()
      (setq indent-tabs-mode nil)
+     (local-set-key "" 'newline-and-indent))))
+
+(add-hook 'java-mode-hook 
+  (function
+   (lambda ()
      (local-set-key "" 'newline-and-indent))))
 
 (setq explicit-cmdproxy.exe-args '("-- /q"))

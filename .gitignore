@@ -4,3 +4,4 @@
 .netrwhist
 emacs.d/server
 config/chromium
+config/gtk-2.0

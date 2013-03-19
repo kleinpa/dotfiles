@@ -1,7 +1,7 @@
 
 # Aliases
 #########
-alias e=vim
+alias e=emacs
 
 #########################################################
 #                      commonfunc                       #
