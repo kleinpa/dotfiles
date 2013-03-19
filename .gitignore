@@ -2,4 +2,5 @@
 *~
 *.local*
 .netrwhist
-.emacs.d/server
+emacs.d/server
+config/chromium
