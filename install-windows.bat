@@ -1,8 +1,4 @@
 @echo off
-rd /S /Q "%USERPROFILE%\vimfiles"
-mklink /D "%USERPROFILE%\vimfiles" "%~dp0vim"
-del /F /Q "%USERPROFILE%\_vimrc"
-mklink "%USERPROFILE%\_vimrc" "%~dp0vimrc"
 del /F /Q "%USERPROFILE%\AppData\Roaming\.emacs.d"
 mklink /D "%USERPROFILE%\AppData\Roaming\.emacs.d" "%~dp0emacs.d"
 del /F /Q "%USERPROFILE%\.gitignore.global"

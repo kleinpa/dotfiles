@@ -28,7 +28,7 @@ Git          | ✓      | ✓       | ✓       |
 MinTTY       | ✓      |         |         |
 Putty        |        |         | ✓       | Installs via registry key
 Sublime Text | ✓      |         | ✓       |
-Vim          | ✓      | ✓       | ✓       |
+Vim          | ✓      | ✓       |         |
 Wallpaper    | ✓      | ✓       | ✓       |
 xinit        | ✓      | ✓       | ✓       |
 Xresources   | ✓      | ✓       |         |
