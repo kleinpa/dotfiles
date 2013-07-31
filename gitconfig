@@ -2,19 +2,26 @@
 	name = Peter Klein
 	email = peter@uytr.org
 [core]
-    editor = vim
-    excludesfile = ~/.gitignore.global
+	editor = vim
+	excludesfile = ~/.gitignore.global
+	pager = most
 [color]
-    ui = true
+	ui = true
 [alias]
-    a = add
-    ai = add --interactive
-    st = status
-    c = commit
-    b = branch -vv
-    co = checkout
-    df = diff
-    wd = diff --word-diff="color"
-    lg = log
-    lgg = log --graph --decorate --pretty=oneline --abbrev-commit --all
-    ph = push origin HEAD
+	a = add
+	ai = add --interactive
+	st = status
+	c = commit
+	b = branch -vv
+	co = checkout
+	df = diff
+	wd = diff --word-diff="color"
+	lg = log
+	lgg = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	ph = push origin HEAD
+	fn = diff-tree --no-commit-id --name-only -r
+	ignored = clean -ndX
+	ac = !git add -A && git commit
+	pr = pull --rebase
+	hub-url = !git config remote.origin.url | sed -e 's/git@\\(.*\\?\\):\\(.*\\?\\).git/http:\\/\\/\\1\\/\\2/' | sed -e 's/\\.git//'
+	hub = "!f(){ if [[ $1 ]]; then cygstart `git hub-url`/commit/`git rev-parse $1`; else cygstart `git hub-url`; fi; }; f"
