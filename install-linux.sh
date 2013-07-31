@@ -1,20 +1,3 @@
-#!/bin/bash
-FILES="
-zshrc
-zsh
-vimrc
-vim
-gitconfig
-gitignore.global
-minttyrc
-emacs.d
-"
-
-#for f in $FILES
-#do
-#    ln -fs $(realpath `dirname $0`)/$f ~
-#done
-
 
 ln -Tfs $(realpath `dirname $0`)/zshrc ~/.zshrc
 ln -Tfs $(realpath `dirname $0`)/zsh ~/.zsh
@@ -27,5 +10,4 @@ ln -Tfs $(realpath `dirname $0`)/Xresources ~/.Xresources
 ln -Tfs $(realpath `dirname $0`)/xinitrc ~/.xinitrc
 ln -Tfs $(realpath `dirname $0`)/config ~/.config
 ln -Tfs $(realpath `dirname $0`)/profile ~/.profile
-
 
