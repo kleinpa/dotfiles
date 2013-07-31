@@ -210,6 +210,15 @@ precmd_functions+='precmd_update_git_vars'
 chpwd_functions+='update_current_git_vars'
 update_current_git_vars
 
+# Smooth out emacs with cygwin
+if [[ $UNAME = "CYGWIN"* ]]; then
+    alias open='cygstart'
+    alias e='open_native_emacs'
+    open_native_emacs() {
+        env -u HOME emacsclientw -na runemacs `cygpath -w $1`
+    }
+fi
+
 # Allow subsitutuion in prompt.
 setopt prompt_subst
 
@@ -226,8 +235,3 @@ fi
 
 # Set the prompt.
 PROMPT='$C0%}[$C1%n$C0@$C1%m$C0:$C1%c$C3$(prompt_git_info)$C0]$C2%# '
-
-# Special emacs alias for windows
-if [[ $UNAME = "CYGWIN"* ]]; then
-    alias e='env -u HOME emacsclientw -na runemacs'
-fi
