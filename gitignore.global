@@ -3,3 +3,5 @@
 *#
 *.pjs.tcNET
 Thumbs.db
+*.sln.cache
+*.lnk
