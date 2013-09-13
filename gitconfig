@@ -20,8 +20,11 @@
 	lgg = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	ph = push origin HEAD
 	fn = diff-tree --no-commit-id --name-only -r
-	ignored = clean -ndX
 	ac = !git add -A && git commit
 	pr = pull --rebase
 	hub-url = !git config remote.origin.url | sed -e 's/git@\\(.*\\?\\):\\(.*\\?\\).git/http:\\/\\/\\1\\/\\2/' | sed -e 's/\\.git//'
 	hub = "!f(){ if [[ $1 ]]; then cygstart `git hub-url`/commit/`git rev-parse $1`; else cygstart `git hub-url`; fi; }; f"
+	ignored = !git ls-files -v | sed -n 's/^[[:lower:]] //p'
+	ignore = update-index --assume-unchanged
+	unignore = update-index --no-assume-unchanged
+	unignore-all = !git ignored | xargs git unignore
