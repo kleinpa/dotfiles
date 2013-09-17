@@ -1,13 +1,30 @@
-
 # Aliases
 #########
-alias e=emacs
+alias cp='cp -i'
+alias mv='mv -i'
+
+alias ls="ls --color=auto --file-type"
+alias ll='ls -ahl'
+
+alias less='less -I'
+alias l='less'
+
+alias cl='clear && pwd && ls'
+
+alias g=git
+
+# Smooth out emacs with cygwin
+if [[ $(uname) = "CYGWIN"* ]]; then
+    alias open='env -u HOME cygstart'
+    alias e='open_native_emacs'
+    open_native_emacs() {
+        env -u HOME emacsclientw -na runemacs `cygpath -w $1`
+    }
+fi
 
 #########################################################
 #                      commonfunc                       #
 #########################################################
-
-UNAME=$(uname)
 
 # helper function to search the $PATH for a given
 # executable.  useful for checks across different
@@ -42,89 +59,21 @@ checkPath() {
     return 1
 }
 
-# processes
-###########
-# output more lines so that you can grep them
-alias psa='ps axwww'
-# grep through processes
-alias psg='psa | grep -i'
-
-# buildout...
-#############
-#alias bfg='bin/control fg'
-#alias bs='bin/control stop'
-#alias bbn='bin/buildout -v'
-
-# make copy and move ask before replacing files
-alias cp='cp -i'
-alias mv='mv -i'
-
-# ls aliases
-############
-# conditionally set up coloring on different OS types
-if [ $UNAME = "FreeBSD" ] || [ $UNAME = "Darwin" ]; then
-   alias ls="ls -GF"
-elif [ $UNAME = "Linux" ] || [[ $UNAME = "CYGWIN"* ]]; then
-   alias ls="ls --color=auto -F"
-elif [ $UNAME = 'SunOS' ]; then
-   alias ls="ls --color=always -F"
-fi
-
-# show me everything
-alias ll='ls -ahl'
-# sort by size
-alias lss='ll -Sr'
-# ll but human readable size
-alias lsa='ll -h'
-# show all dot files and dirs
-#alias lsd='ls -ld .*'
-
-# less
-######
-
-# case insensetive searching in less
-alias less='less -I'
-
-# colors!!!
-###########
-
-# for FreeBSD
-# Pretty LSCOLORS explanation:
-# http://www.mjxg.com/index.py/geek/lscolors_and_ls_colors
-#
-# This set works nicely for dark backgrounds...
-#
-#export LSCOLORS="cxgxCxdxbxegedabagacdx"
-
 # for linux
 # Pretty LS_COLORS explanation: 
 # http://www.mjxg.com/index.py/geek/lscolors_and_ls_colors
 #
 # This set works nicely for dark backgrounds...
 #
-#export LS_COLORS="no=00:fi=00:di=32:ln=36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=31:*.cmd=01;32:*.exe=01;32:*.com=01;32:*.btm=01;32:*.bat=01;32:*.sh=01;32:*.csh=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.bz=01;31:*.tz=01;31:*.rpm=01;31:*.cpio=01;31:*.jpg=01;35:*.gif=01;35:*.bmp=01;35:*.xbm=01;35:*.xpm=01;35:*.png=01;35:*.tif=01;35:"
-
-# set the ACK match color scheme
-#export ACK_COLOR_MATCH="red"
+export LS_COLORS="no=00:fi=00:di=32:ln=36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=31:*.cmd=01;32:*.exe=01;32:*.com=01;32:*.btm=01;32:*.bat=01;32:*.sh=01;32:*.csh=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.bz=01;31:*.tz=01;31:*.rpm=01;31:*.cpio=01;31:*.jpg=01;35:*.gif=01;35:*.bmp=01;35:*.xbm=01;35:*.xpm=01;35:*.png=01;35:*.tif=01;35:"
 
 # set the grep colors for matching, etc.
-#export GREP_COLORS="ms=01;31:mc=01;31:sl=:cx=:fn=32:ln=36:bn=32:se=39"
+export GREP_COLORS="ms=01;31:mc=01;31:sl=:cx=:fn=32:ln=36:bn=32:se=39"
 
 
 #########################################################
 #                         zshrc                         #
 #########################################################
-
-# Common hashes
-#hash -d L=/var/log
-#hash -d R=/usr/local/etc/rc.d
-
-# global aliases
-################
-# disable the plonesite part in a buildout run, example: $ bin/buildout -N psef
-#alias -g psef="plonesite:enabled=false"
-# get the site packages for your python, example: $ cd $(python2.5 site-packages)
-#alias -g site_packages='-c "from distutils.sysconfig import get_python_lib; print get_python_lib()"'
 
 # turn off the stupid bell
 #setopt NO_BEEP
@@ -194,30 +143,20 @@ if [[ "$TERM" != emacs ]]; then
 [[ "$terminfo[kend]" == "^[O"* ]] && bindkey -M emacs "${terminfo[kend]/O/[}" end-of-line
 fi
 
-# git prompt: http://sebastiancelis.com/2009/11/16/zsh-prompt-git-users/
-
 # Autoload zsh functions.
 fpath=(~/.zsh/functions $fpath)
 autoload -U ~/.zsh/functions/*(:t)
 
+# Git Prompt: http://sebastiancelis.com/2009/11/16/zsh-prompt-git-users/
+#############
 # Enable auto-execution of functions
 typeset -ga preexec_functions
 typeset -ga precmd_functions
 typeset -ga chpwd_functions
-
 preexec_functions+='preexec_update_git_vars'
 precmd_functions+='precmd_update_git_vars'
 chpwd_functions+='update_current_git_vars'
 update_current_git_vars
-
-# Smooth out emacs with cygwin
-if [[ $UNAME = "CYGWIN"* ]]; then
-    alias open='cygstart'
-    alias e='open_native_emacs'
-    open_native_emacs() {
-        env -u HOME emacsclientw -na runemacs `cygpath -w $1`
-    }
-fi
 
 # Allow subsitutuion in prompt.
 setopt prompt_subst
@@ -231,7 +170,6 @@ C3=$'%{\e[0;34m%}'     # Color for GIT info
 if [[ -e ~/.zshrc.local ]]; then
     source ~/.zshrc.local
 fi
-
 
 # Set the prompt.
 PROMPT='$C0%}[$C1%n$C0@$C1%m$C0:$C1%c$C3$(prompt_git_info)$C0]$C2%# '
