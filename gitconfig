@@ -28,3 +28,4 @@
 	ignore = update-index --assume-unchanged
 	unignore = update-index --no-assume-unchanged
 	unignore-all = !git ignored | xargs git unignore
+	woops = commit --amend --no-edit
