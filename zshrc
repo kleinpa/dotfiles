@@ -22,6 +22,12 @@ if [[ $(uname) = "CYGWIN"* ]]; then
     }
 fi
 
+hash -d p=~/projects/
+if [[ $(uname) = "CYGWIN"* ]]; then
+    hash -d p=/cygdrive/c/Users/$(whoami)/projects/
+fi
+
+
 #########################################################
 #                      commonfunc                       #
 #########################################################
