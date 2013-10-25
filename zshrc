@@ -13,20 +13,7 @@ alias cl='clear && pwd && ls'
 
 alias g=git
 
-# Smooth out emacs with cygwin
-if [[ $(uname) = "CYGWIN"* ]]; then
-    alias open='env -u HOME cygstart'
-    alias e='open_native_emacs'
-    open_native_emacs() {
-        env -u HOME emacsclientw -na runemacs `cygpath -w $1`
-    }
-fi
-
 hash -d p=~/projects/
-if [[ $(uname) = "CYGWIN"* ]]; then
-    hash -d p=/cygdrive/c/Users/$(whoami)/projects/
-fi
-
 
 #########################################################
 #                      commonfunc                       #
@@ -42,8 +29,8 @@ checkPath() {
     OIFS=$IFS
     IFS=':'
     for dir in $PATH
-    do 
-        execpath="$dir/$1" 
+    do
+        execpath="$dir/$1"
         if [ -x $execpath ]; then
             IFS=$OIFS
             return 0
@@ -52,21 +39,21 @@ checkPath() {
 
     # set the file separator back to normal
     IFS=$OIFS
-    
+
     # the zsh compatible version
     for dir in $path
-    do 
+    do
         execpath="$dir/$1"
         if [ -x $execpath ]; then
             return 0
         fi
     done
-    
+
     return 1
 }
 
 # for linux
-# Pretty LS_COLORS explanation: 
+# Pretty LS_COLORS explanation:
 # http://www.mjxg.com/index.py/geek/lscolors_and_ls_colors
 #
 # This set works nicely for dark backgrounds...
@@ -168,7 +155,7 @@ update_current_git_vars
 setopt prompt_subst
 
 # Color Definitions
-C0=$'%{\e[1;33m%}'     # White for [ : ] 
+C0=$'%{\e[1;33m%}'     # White for [ : ]
 C1=$'%{\e[1;31m%}'     # Color for name, system, directory
 C2=$'%{\e[0m%}'        # Color for averything after prompt
 C3=$'%{\e[0;34m%}'     # Color for GIT info
@@ -179,3 +166,9 @@ fi
 
 # Set the prompt.
 PROMPT='$C0%}[$C1%n$C0@$C1%m$C0:$C1%c$C3$(prompt_git_info)$C0]$C2%# '
+
+if [[ $(uname) = "CYGWIN"* ]]; then
+    if [[ -e ~/.zshrc.cygwin ]]; then
+	source ~/.zshrc.cygwin
+    fi
+fi

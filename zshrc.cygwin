@@ -1,0 +1,11 @@
+alias open='env -u HOME cygstart'
+alias e='open_native_emacs'
+open_native_emacs() {
+    env -u HOME emacsclientw -na runemacs `cygpath -w $1`
+}
+
+hash -d p=/cygdrive/c/Users/$(whoami)/projects/
+
+cmd() {
+    open cmd /K "cd `cygpath -w $1`"
+}
