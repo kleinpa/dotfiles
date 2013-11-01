@@ -7,4 +7,4 @@ del /F /Q "%USERPROFILE%\.gitconfig"
 mklink "%USERPROFILE%\.gitconfig" "%~dp0gitconfig"
 
 regedit /s "%~dp0\putty_default_settings.reg"
-
+regedit /s "%~dp0\diffmerge_settings.reg"

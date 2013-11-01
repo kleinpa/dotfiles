@@ -7,6 +7,14 @@
 	pager = most
 [color]
 	ui = true
+[diff]
+	tool = diffmerge
+[difftool "diffmerge"]
+	cmd = sgdm_cygwin.sh /p1=\"$LOCAL\" /p2=\"$REMOTE\"
+[merge]
+	tool = diffmerge
+[mergetool "diffmerge"]
+	cmd = sgdm_cygwin.sh /merge /result=\"$MERGED\" /p1=\"$LOCAL\" /p2=\"$BASE\" /p3=\"$REMOTE\"
 [alias]
 	a = add
 	ai = add --interactive
@@ -14,7 +22,7 @@
 	c = commit
 	b = branch -vv
 	co = checkout
-	df = diff
+	df = difftool --dir-diff
 	wd = diff --word-diff="color"
 	lg = log
 	lgg = log --graph --decorate --pretty=oneline --abbrev-commit --all
