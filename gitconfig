@@ -7,6 +7,23 @@
 	pager = most
 [color]
 	ui = true
+[color "branch"]
+       current = blue bold
+       local = green bold
+       remote = red
+       upstream = black white ul
+       plain = red green
+[color "diff"]
+       meta = yellow bold
+       frag = magenta bold
+       old = red bold
+       new = green bold
+[color "status"]
+       added = yellow
+       #changed = green
+       untracked = cyan
+       deleted = red
+       branch = blue
 [diff]
 	tool = diffmerge
 [difftool "diffmerge"]
