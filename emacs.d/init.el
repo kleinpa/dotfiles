@@ -7,12 +7,14 @@
 ;;(setq w32-quote-process-args ?\")
 
 ;; Colors
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'solarized-light t)
+;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+;(load-theme 'solarized-light t)
 
 ;; Set the default font and frame size for all frames
 (if window-system (tool-bar-mode 0))
 (if window-system (menu-bar-mode 0))
+(if window-system (scroll-bar-mode 0))
+
 
 
 ;; Must figure out cross-platform font
@@ -24,9 +26,9 @@
     (left . ,(- (/ (display-pixel-width) 2) (* (frame-char-width) 40)))
     (width . 80)
     (height . ,(/ (- (display-pixel-height) 85) (frame-char-height)))))
-(setq default-frame-alist
-  (cons '(font . "-*-Lucida Console-normal-r-*-*-12-90-96-96-c-*-iso8859-1")
-    default-frame-alist))
+;(setq default-frame-alist
+;  (cons '(font . "-*-Lucida Console-normal-r-*-*-12-90-96-96-c-*-iso8859-1")
+;    default-frame-alist))
 
 ;(insert (prin1-to-string (w32-select-font)))
 ;(insert (prin1-to-string (current-frame-configuration)))
@@ -132,14 +134,22 @@
 (setq font-lock-use-default-maximal-decoration t)
 
 ;; package.el
-(require 'package)
-(package-initialize)
+;(require 'package)
+;(package-initialize)
 
 ;; Misc personal settings
 (setq vc-follow-symlinks t)
 
-;; Markdown Mode
+;; Load Path
 (add-to-list 'load-path "~/.emacs.d/lisp")
+
+;; Lua Mode
+(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+(add-to-list 'interpreter-mode-alist '("\\.lua$" . lua-mode))
+
+;; Markdown Mode
+
 (autoload 'markdown-mode "markdown-mode"
    "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
