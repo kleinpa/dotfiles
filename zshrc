@@ -13,6 +13,8 @@ alias cl='clear && pwd && ls'
 
 alias g=git
 
+alias e='emacs'
+
 hash -d p=~/projects/
 
 #########################################################
