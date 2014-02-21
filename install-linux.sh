@@ -10,5 +10,10 @@ ln -Tfs $(realpath `dirname $0`)/Xresources ~/.Xresources
 ln -Tfs $(realpath `dirname $0`)/xinitrc ~/.xinitrc
 ln -Tfs $(realpath `dirname $0`)/config ~/.config
 ln -Tfs $(realpath `dirname $0`)/profile ~/.profile
+ln -Tfs $(realpath `dirname $0`)/zprofile ~/.zprofile
 ln -Tfs $(realpath `dirname $0`)/ssh ~/.ssh
 ln -Tfs $(realpath `dirname $0`)/bin ~/bin
+
+mkdir -p ~/.vagrant.d/
+ln -Tfs $(realpath `dirname $0`)/vagrant.d/Vagrantfile ~/.vagrant.d/Vagrantfile
+ln -Tfs $(realpath `dirname $0`)/vagrant.d/scripts ~/.vagrant.d/scripts

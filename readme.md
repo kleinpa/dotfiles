@@ -33,3 +33,4 @@ Wallpaper    | ✓      | ✓       | ✓       |
 xinit        | ✓      | ✓       | ✓       |
 Xresources   | ✓      | ✓       |         |
 Zsh          | ✓      | ✓       |         |
+Vagrant      | ✓      |         | ✓       |

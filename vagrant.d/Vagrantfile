@@ -1,0 +1,3 @@
+Vagrant.configure("2") do |config|
+  config.vm.provision :shell, :path => File.join(File.dirname(__FILE__), "scripts", "personal_provision.sh")
+end
