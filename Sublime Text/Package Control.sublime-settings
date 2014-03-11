@@ -2,6 +2,7 @@
 	"installed_packages":
 	[
 		"JsFormat",
+		"LineEndings",
 		"Package Control",
 		"SublimeCodeIntel",
 		"TrailingSpaces"
