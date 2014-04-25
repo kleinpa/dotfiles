@@ -1,11 +1,25 @@
-alias open='env -u HOME cygstart'
-alias e='open_native_emacs'
-open_native_emacs() {
-    env -u HOME emacsclientw -na runemacs `cygpath -w $1`
+hash -d p="$(cygpath -u $USERPROFILE)/projects/"
+
+fix_args() {
+    if [[ -n $@ ]]; then
+        cygpath -wa $@
+    fi
 }
 
-hash -d p=/cygdrive/c/Users/$(whoami)/projects/
+emacs() {
+    env -u HOME cygstart emacsclientw -na runemacs $(fix_args $@)
+}
+
+sublime_text() {
+    env -u HOME cygstart sublime_text $(fix_args $@)
+}
+
+alias open='env -u HOME cygstart'
 
 cmd() {
-    open cmd /K "cd `cygpath -w $1`"
+    if [[ -n $1 ]]; then
+        open cmd /K "cd $(cygpath -w $1)"
+    else
+        open cmd
+    fi
 }
