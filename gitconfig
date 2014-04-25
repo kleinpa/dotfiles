@@ -4,7 +4,7 @@
 [core]
 	editor = emacs
 	excludesfile = ~/.gitignore.global
-	pager = most
+	pager = less
 [color]
 	ui = true
 [color "branch"]
