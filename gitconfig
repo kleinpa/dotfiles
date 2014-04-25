@@ -2,7 +2,7 @@
 	name = Peter Klein
 	email = peter@uytr.org
 [core]
-	editor = emacs
+	editor = $GIT_EDITOR
 	excludesfile = ~/.gitignore.global
 	pager = less
 [color]

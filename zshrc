@@ -13,9 +13,32 @@ alias cl='clear && pwd && ls'
 
 alias g=git
 
-alias e='emacs'
+alias e='$EDITOR'
 
 hash -d p=~/projects/
+
+# Editors
+########
+
+# These represent my current preferences
+if [ -n $(command -v sublime_text) ]; then
+    export EDITOR=sublime_text
+elif [ -n $(command -v emacs) ]; then
+    export EDITOR=emacs
+elif [ -n $(command -v vim) ]; then
+    export EDITOR=vim
+elif [ -n $(command -v nano) ]; then
+    export EDITOR=nano
+fi
+
+# vim is nice for editing commits
+if [ -n $(command -v vim) ]; then
+    export GIT_EDITOR="vim -c 'startinsert'"
+elif [ -n $(command -v emacs) ]; then
+    export GIT_EDITOR="emacs -nw"
+elif [ -n $(command -v nano) ]; then
+    export GIT_EDITOR=nano
+fi
 
 #########################################################
 #                      commonfunc                       #
