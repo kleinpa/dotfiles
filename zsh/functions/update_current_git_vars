@@ -1,8 +1,15 @@
 unset __CURRENT_GIT_BRANCH
 unset __CURRENT_GIT_BRANCH_STATUS
 unset __CURRENT_GIT_BRANCH_IS_DIRTY
+unset __CURRENT_GIT_TIMEOUT
 
-local st="$(git status 2>/dev/null)"
+local st
+st="$(timeout 0.3s git status 2>/dev/null)"
+if [[ $? -eq 124 ]]; then
+    __CURRENT_GIT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+    __CURRENT_GIT_TIMEOUT='1'
+fi
+
 if [[ -n "$st" ]]; then
     local -a arr
     arr=(${(f)st})

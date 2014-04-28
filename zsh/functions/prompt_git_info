@@ -15,7 +15,11 @@ if [ -n "$__CURRENT_GIT_BRANCH" ]; then
     if [ -n "$__CURRENT_GIT_BRANCH_IS_DIRTY" ]; then
         s+="∆"
     fi
+    if [ -n "$__CURRENT_GIT_TIMEOUT" ]; then
+        s+="?"
+    fi
     s+=")"
- 
+
     printf " %s%s" "%{${fg[yellow]}%}" $s
 fi
+
