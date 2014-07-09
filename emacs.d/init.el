@@ -7,8 +7,8 @@
 ;;(setq w32-quote-process-args ?\")
 
 ;; Colors
-;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-;(load-theme 'solarized-light t)
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(load-theme 'solarized-light t)
 
 ;; Set the default font and frame size for all frames
 (if window-system (tool-bar-mode 0))
