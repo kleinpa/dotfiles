@@ -2,7 +2,8 @@
 *~
 *.local*
 .netrwhist
-emacs.d/server
-config/chromium
-config/gtk-2.0
 Thumbs.db
+
+/emacs.d/**
+!/emacs.d/init.el
+!/emacs.d/rc/
