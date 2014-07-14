@@ -8,3 +8,6 @@
 (setq shell-file-name explicit-shell-file-name)
 (setq explicit-zsh.exe-args '("--login" "-i"))
 (setq w32-quote-process-args ?\")
+
+;; Use miktex instead of whatever the normal default is
+(require 'tex-mik)
