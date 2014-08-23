@@ -1,11 +1,14 @@
 ;; Colors
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'solarized-light t)
+
 
 ;; Set the default font and frame size for all frames
-(if window-system (tool-bar-mode 0))
-(if window-system (menu-bar-mode 0))
-(if window-system (scroll-bar-mode 0))
+(when window-system 
+  (tool-bar-mode 0)
+  (menu-bar-mode 0)
+  (scroll-bar-mode 0)
+  (when (>= emacs-major-version 24)
+    (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+    (load-theme 'solarized-light t)))
 
 ;; Must figure out cross-platform font
 ;; (set-default-font "-*-Consolas-normal-r-*-*-12-90-96-96-c-*-iso8859-1")
