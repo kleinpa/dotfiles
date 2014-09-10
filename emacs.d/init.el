@@ -10,6 +10,7 @@
 ;; Language Modes
 (load-file (rc "c.el"))
 (load-file (rc "css.el"))
+(load-file (rc "go.el"))
 (load-file (rc "java.el"))
 (load-file (rc "javascript.el"))
 (load-file (rc "latex.el"))

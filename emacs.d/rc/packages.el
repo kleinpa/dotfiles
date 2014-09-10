@@ -1,10 +1,13 @@
 (when (>= emacs-major-version 24)
   ;; list of packages to install
-  (setq package-list
-	'(auctex 
-	  latex-preview-pane
-	  less-css-mode
-	  web-beautify))
+  (setq package-list '(
+		       auctex
+		       go-mode
+		       latex-preview-pane
+		       less-css-mode
+		       magit
+		       web-beautify
+		       ))
 
   (setq package-archives
 	'(("marmalade" . "http://marmalade-repo.org/packages/")
