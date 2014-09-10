@@ -2,7 +2,7 @@
 
 
 ;; Set the default font and frame size for all frames
-(when window-system 
+(when window-system
   (tool-bar-mode 0)
   (menu-bar-mode 0)
   (scroll-bar-mode 0)

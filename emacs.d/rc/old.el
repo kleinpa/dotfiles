@@ -12,13 +12,15 @@
    (lambda ()
      (auto-fill-mode 1)
      (setq indent-tabs-mode nil)
-     (local-set-key "" 'newline-and-indent))))
+     (local-set-key "
+" 'newline-and-indent))))
 
 (add-hook 'fundamental-mode
   (function
    (lambda ()
      (setq indent-tabs-mode nil)
-     (local-set-key "" 'newline-and-indent))))
+     (local-set-key "
+" 'newline-and-indent))))
 
 
 (add-hook 'comint-mode-hook
@@ -45,3 +47,5 @@
 
 ;; Misc personal settings
 (setq vc-follow-symlinks t)
+
+(global-auto-revert-mode 1)
