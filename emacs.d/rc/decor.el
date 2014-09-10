@@ -1,7 +1,4 @@
 ;; Colors
-
-
-;; Set the default font and frame size for all frames
 (when window-system
   (tool-bar-mode 0)
   (menu-bar-mode 0)
@@ -10,28 +7,14 @@
     (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
     (load-theme 'solarized-light t)))
 
-;; Must figure out cross-platform font
-;; (set-default-font "-*-Consolas-normal-r-*-*-12-90-96-96-c-*-iso8859-1")
-
-
-
-
-
 (setq initial-frame-alist
   `((top . 0)
     (left . ,(- (/ (display-pixel-width) 2) (* (frame-char-width) 40)))
     (width . 80)
     (height . ,(/ (- (display-pixel-height) 85) (frame-char-height)))))
-;(setq default-frame-alist
-;  (cons '(font . "-*-Lucida Console-normal-r-*-*-12-90-96-96-c-*-iso8859-1")
-;    default-frame-alist))
-
 
 ;; Include line numbers in print outs
 (setq ps-line-number t)
-
-;(insert (prin1-to-string (w32-select-font)))
-;(insert (prin1-to-string (current-frame-configuration)))
 
 ;; Highlight mark (selection)
 (transient-mark-mode t)
