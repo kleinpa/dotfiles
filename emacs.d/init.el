@@ -1,5 +1,9 @@
 (defun rc (fn)
-  (concat (file-name-directory load-file-name) (convert-standard-filename "rc/") fn))
+  (concat (file-name-directory load-file-name) (convert-standard-filename "rc/")
+ fn))
+
+(pp (directory-files (concat (file-name-directory load-file-name)
+			 (convert-standard-filename "rc/"))))
 
 (load-file (rc "server.el"))
 (load-file (rc "packages.el"))
@@ -21,6 +25,7 @@
 ;; Other
 (load-file (rc "common-hooks.el"))
 (load-file (rc "woman.el"))
+(load-file (rc "keys.el"))
 
 ;; Platform Specific Settings
 (let ((platform-rc (rc (concat "platform-" (symbol-name system-type) ".el"))))

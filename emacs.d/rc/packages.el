@@ -7,6 +7,7 @@
 		       less-css-mode
 		       magit
 		       web-beautify
+		       multiple-cursors
 		       ))
 
   (setq package-archives
