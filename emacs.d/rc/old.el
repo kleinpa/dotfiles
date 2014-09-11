@@ -49,3 +49,4 @@
 
 (global-auto-revert-mode 1)
 (delete-selection-mode 1)
+(autopair-global-mode)

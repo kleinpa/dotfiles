@@ -2,6 +2,7 @@
   ;; list of packages to install
   (setq package-list '(
 		       auctex
+		       autopair
 		       go-mode
 		       latex-preview-pane
 		       less-css-mode
