@@ -1,4 +1,3 @@
-
 (setq auto-mode-alist (append '(("\\.doc\\'" . text-mode)
 				("\\.html\\'" . text-mode))
 			      auto-mode-alist))
@@ -49,3 +48,4 @@
 (setq vc-follow-symlinks t)
 
 (global-auto-revert-mode 1)
+(delete-selection-mode 1)

@@ -8,6 +8,7 @@
 		       magit
 		       web-beautify
 		       multiple-cursors
+		       expand-region
 		       ))
 
   (setq package-archives
