@@ -2,13 +2,13 @@
   ;; list of packages to install
   (setq package-list '(
 		       auctex
-		       autopair
 		       go-mode
 		       latex-preview-pane
 		       less-css-mode
 		       magit
 		       web-beautify
 		       multiple-cursors
+		       smartparens
 		       expand-region
 		       ))
 
