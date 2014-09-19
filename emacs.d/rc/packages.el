@@ -10,6 +10,9 @@
 		       multiple-cursors
 		       smartparens
 		       expand-region
+		       solarized-theme
+		       git-gutter
+		       markdown-mode
 		       ))
 
   (setq package-archives
@@ -29,3 +32,22 @@
     (unless (package-installed-p package)
       (package-install package)))
   )
+
+;; (custom-set-variables
+;;  '(git-gutter:unchanged-sign " "))
+
+;; (set-face-attribute 'git-gutter:separator nil
+;; 		    :background (face-background 'mode-line))
+
+;; (set-face-attribute 'git-gutter:modified nil
+;; 		    :background (face-background 'mode-line))
+
+;; (set-face-attribute 'git-gutter:added nil
+;; 		    :foreground "#00ff00x"
+;; 		    :background (face-background 'mode-line))
+
+;; (set-face-attribute 'git-gutter:deleted nil
+;; 		    :background (face-background 'mode-line))
+
+;; (set-face-attribute 'git-gutter:unchanged nil
+;; 		    :background (face-background 'mode-line))

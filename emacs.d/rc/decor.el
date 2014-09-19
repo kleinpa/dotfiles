@@ -4,8 +4,8 @@
   (menu-bar-mode 0)
   (scroll-bar-mode 0)
   (when (>= emacs-major-version 24)
-    (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-    (load-theme 'solarized-light t)))
+    (load-theme 'solarized-light t)
+    ))
 
 (setq initial-frame-alist
   `((top . 0)
@@ -31,4 +31,3 @@
 (setq font-lock-global-modes '(not shell-mode))
 (setq font-lock-use-colors t)
 (setq font-lock-use-default-maximal-decoration t)
-

@@ -11,3 +11,7 @@
 
 ;; For Expand Region
 (global-set-key (kbd "C-@") 'er/expand-region)
+
+;; Chrome-like buffer navigation
+(global-set-key (kbd "<C-prior>") 'previous-buffer)
+(global-set-key (kbd "<C-next>") 'next-buffer)

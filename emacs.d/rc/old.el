@@ -49,5 +49,14 @@
 
 (global-auto-revert-mode 1)
 (delete-selection-mode 1)
-(smartparens-global-mode 1)
-(electric-indent-mode 1)
+
+(when (require 'smartparens nil :noerror)
+  (smartparens-global-mode 1))
+
+(when (>= emacs-major-version 24)
+  (electric-indent-mode 1))
+
+(when (require 'git-gutter nil :noerror)
+  (global-git-gutter-mode t)
+  (custom-set-variables
+   '(git-gutter:lighter " GG")))
