@@ -57,7 +57,7 @@
     git-gutter
     markdown-mode
     js2-mode
-    erlang-mode
+    erlang
     ))
 
 (defun install-my-packages ()
@@ -112,23 +112,18 @@
 (after 'smartparens-autoloads
   (smartparens-global-mode t)
   (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
-  (sp-local-pair 'scheme-mode "'" nil :actions nil))
+  (sp-local-pair 'scheme-mode "'" nil :actions nil)
+  (add-hook 'scheme-mode-hook (lambda () (sp-pair "'" nil)))
+  (add-hook 'emacs-lisp-mode-hook (lambda () (sp-pair "'" nil))))
 
 ;;; Scheme
 (add-to-list 'auto-mode-alist '("\\.ms$" . scheme-mode))
 (add-to-list 'auto-mode-alist '("\\.ss$" . scheme-mode))
-(add-hook 'scheme-mode-hook
-	  (lambda ()
-	    (sp-pair "'" nil)
-	    ))
+
 (autoload 'run-scheme "cmuscheme" "Run an inferior scheme process." t)
 (global-set-key "!" 'run-scheme)
 
 ;;; Lisp
-(add-hook 'emacs-lisp-mode-hook
-	  (lambda ()
-	    (sp-pair "'" nil)
-	    ))
 
 ;; Javascript
 (defvar js-indent-level 2)
