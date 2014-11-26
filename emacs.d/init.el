@@ -70,17 +70,20 @@
 	my-packages))
 
 ;;;; Macros
-(defmacro after (mode &rest body)
-  "`eval-after-load' MODE evaluate BODY."
-  (declare (indent defun))
-  `(eval-after-load ,mode
-     '(progn ,@body)))
+
+;; This seems to be needed before 24.4.
+(unless (fboundp 'with-eval-after-load)
+  (defmacro with-eval-after-load (mode &rest body)
+    "`eval-after-load' MODE evaluate BODY."
+    (declare (indent defun))
+    `(eval-after-load ,mode
+       '(progn ,@body))))
 
 ;;;; Global Key Bindings
 (global-set-key (kbd "<C-prior>") 'previous-buffer)
 (global-set-key (kbd "<C-next>") 'next-buffer)
 
-(after 'multiple-cursors-autoloads
+(with-eval-after-load "multiple-cursors-autoloads"
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
   (global-set-key (kbd "C-S-c C-e") 'mc/edit-ends-of-lines)
   (global-set-key (kbd "C-S-c C-a") 'mc/edit-beginnings-of-lines)
@@ -94,7 +97,7 @@
   (global-set-key (kbd "C-*") 'mc/mark-all-like-this)
   (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click))
 
-(after 'expand-region-autoloads
+(with-eval-after-load "expand-region-autoloads"
     (global-set-key (kbd "C-=") 'er/expand-region))
 
 ;;;; Language Settings
@@ -104,17 +107,20 @@
 			(awk-mode . "awk")
 			(other . "bsd")))
 
-(after 'electric-autoloads
+(with-eval-after-load "electric-autoloads"
   (electric-indent-mode 1))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(after 'smartparens-autoloads
+(with-eval-after-load "smartparens-autoloads"
   (smartparens-global-mode t)
   (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
   (sp-local-pair 'scheme-mode "'" nil :actions nil)
   (add-hook 'scheme-mode-hook (lambda () (sp-pair "'" nil)))
   (add-hook 'emacs-lisp-mode-hook (lambda () (sp-pair "'" nil))))
+
+(global-auto-revert-mode 1)
+(delete-selection-mode 1)
 
 ;;; Scheme
 (add-to-list 'auto-mode-alist '("\\.ms$" . scheme-mode))
@@ -128,7 +134,7 @@
 ;; Javascript
 (defvar js-indent-level 2)
 
-(after 'js2-mode-autoloads
+(with-eval-after-load "js2-mode-autoloads"
   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
   (add-hook 'js2-mode-hook
 	    (lambda ()
@@ -146,7 +152,7 @@
 ;; CSS
 (setq css-indent-offset 2)
 
-(after 'color-theme-solarized-autoloads
+(with-eval-after-load "color-theme-solarized-autoloads"
   (load-theme 'solarized-light t))
 
 ;; Custom
