@@ -45,19 +45,20 @@
 
 (defvar my-packages
   '(auctex
+    color-theme-solarized
+    erlang
+    expand-region
+    git-gutter
     go-mode
+    js2-mode
     latex-preview-pane
     less-css-mode
     magit
-    web-beautify
-    multiple-cursors
-    smartparens
-    expand-region
-    color-theme-solarized
-    git-gutter
     markdown-mode
-    js2-mode
-    erlang
+    multiple-cursors
+    pretty-lambdada
+    smartparens
+    web-beautify
     ))
 
 (defun install-my-packages ()
@@ -107,29 +108,26 @@
 			(awk-mode . "awk")
 			(other . "bsd")))
 
-(with-eval-after-load "electric-autoloads"
-  (electric-indent-mode 1))
-
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(with-eval-after-load "smartparens-autoloads"
-  (smartparens-global-mode t)
-  (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
-  (sp-local-pair 'scheme-mode "'" nil :actions nil)
-  (add-hook 'scheme-mode-hook (lambda () (sp-pair "'" nil)))
-  (add-hook 'emacs-lisp-mode-hook (lambda () (sp-pair "'" nil))))
-
 (global-auto-revert-mode 1)
 (delete-selection-mode 1)
 
-;;; Scheme
+(with-eval-after-load "electric-autoloads"
+  (electric-indent-mode 1))
+
+(with-eval-after-load "smartparens-autoloads"
+  (smartparens-global-mode t)
+  (sp-local-pair '(scheme-mode emacs-lisp-mode) "'" nil :actions nil))
+
+(with-eval-after-load "pretty-lambdada-autoloads"
+  (pretty-lambda-for-modes))
+
+;; Scheme
 (add-to-list 'auto-mode-alist '("\\.ms$" . scheme-mode))
 (add-to-list 'auto-mode-alist '("\\.ss$" . scheme-mode))
 
 (autoload 'run-scheme "cmuscheme" "Run an inferior scheme process." t)
 (global-set-key "!" 'run-scheme)
-
-;;; Lisp
 
 ;; Javascript
 (defvar js-indent-level 2)
