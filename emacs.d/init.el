@@ -1,7 +1,3 @@
-(tool-bar-mode 0)
-(scroll-bar-mode 0)
-(menu-bar-mode 0)
-
 (prefer-coding-system 'utf-8-unix)
 
 (global-set-key "%" 'shell)
@@ -65,7 +61,7 @@
   "Install my packages."
   (interactive)
   (package-refresh-contents)
-  (mapc '(lambda (package)
+  (mapc (lambda (package)
 	   (unless (package-installed-p package)
 	     (package-install package)))
 	my-packages))
@@ -150,8 +146,13 @@
 ;; CSS
 (setq css-indent-offset 2)
 
-(with-eval-after-load "color-theme-solarized-autoloads"
-  (load-theme 'solarized-light t))
+;; Styles
+(when window-system
+    (tool-bar-mode 0)
+    (scroll-bar-mode 0)
+    (menu-bar-mode 0)
+    (with-eval-after-load "color-theme-solarized-autoloads"
+      (load-theme 'solarized-light t)))
 
 ;; Custom
 (custom-set-variables
