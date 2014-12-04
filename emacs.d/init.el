@@ -1,17 +1,10 @@
 (prefer-coding-system 'utf-8-unix)
 
-(global-set-key "%" 'shell)
-
-(setq explicit-cmdproxy.exe-args '("-- /q"))
 (setq inhibit-startup-message t)
 (setq require-final-newline nil)
 (put 'eval-expression 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
-
-;; Man pages
-(autoload 'woman "woman" "Decode and browse a UN*X man page." t)
-(autoload 'woman-find-file "woman" "Find, decode and browse a specific UN*X man-page file." t)
 
 ;; Should be able to load multiple files into one emacs window
 (server-start)
@@ -24,6 +17,7 @@
 (when (eq system-type 'gnu/linux)
     )
 (when (eq system-type 'windows-nt)
+  (setq explicit-cmdproxy.exe-args '("-- /q"))
   (set-default-font "Consolas-9")
   (setq exec-path (cons "c:/cygwin/bin" exec-path))
   (setenv "PATH" (concat "c:\\cygwin\\bin;" (getenv "PATH")))
@@ -31,40 +25,6 @@
   (setq shell-file-name "bash")
   (setq explicit-shell-file-name "bash")
   (setq w32-quote-process-args ?\"))
-
-;;;; Package Installation and Loading
-(require 'package)
-(setq package-user-dir "~/.emacs.d/elpa/")
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(package-initialize)
-
-(defvar my-packages
-  '(auctex
-    color-theme-solarized
-    erlang
-    expand-region
-    git-gutter
-    go-mode
-    js2-mode
-    latex-preview-pane
-    less-css-mode
-    magit
-    markdown-mode
-    multiple-cursors
-    pretty-lambdada
-    smartparens
-    web-beautify
-    ))
-
-(defun install-my-packages ()
-  "Install my packages."
-  (interactive)
-  (package-refresh-contents)
-  (mapc (lambda (package)
-	   (unless (package-installed-p package)
-	     (package-install package)))
-	my-packages))
 
 ;;;; Macros
 
@@ -75,6 +35,42 @@
     (declare (indent defun))
     `(eval-after-load ,mode
        '(progn ,@body))))
+
+;;;; Package Installation and Loading
+(require 'package nil t)
+(with-eval-after-load "package"
+  (setq package-user-dir "~/.emacs.d/elpa/")
+  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+  ;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
+  (package-initialize)
+
+  (defvar my-packages
+    '(auctex
+      color-theme-solarized
+      erlang
+      expand-region
+      git-gutter
+      gist
+      go-mode
+      js2-mode
+      latex-preview-pane
+      less-css-mode
+      magit
+      markdown-mode
+      multiple-cursors
+      pretty-lambdada
+      smartparens
+      web-beautify
+      ))
+
+  (defun install-my-packages ()
+    "Install my packages."
+    (interactive)
+    (package-refresh-contents)
+    (mapc (lambda (package)
+	     (unless (package-installed-p package)
+	       (package-install package)))
+	  my-packages)))
 
 ;;;; Global Key Bindings
 (global-set-key (kbd "<C-prior>") 'previous-buffer)
@@ -156,15 +152,7 @@
 
 ;; Custom
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  )
 
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  )
