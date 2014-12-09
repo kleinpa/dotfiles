@@ -72,27 +72,6 @@
 	       (package-install package)))
 	  my-packages)))
 
-;;;; Global Key Bindings
-(global-set-key (kbd "<C-prior>") 'previous-buffer)
-(global-set-key (kbd "<C-next>") 'next-buffer)
-
-(with-eval-after-load "multiple-cursors-autoloads"
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-  (global-set-key (kbd "C-S-c C-e") 'mc/edit-ends-of-lines)
-  (global-set-key (kbd "C-S-c C-a") 'mc/edit-beginnings-of-lines)
-  (global-set-key (kbd "C-.") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C->") 'mc/skip-to-next-like-this)
-  (global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-<") 'mc/skip-to-previos-like-this)
-  (global-set-key (kbd "C-<return>") 'mc/mark-more-like-this-extended)
-  (global-set-key (kbd "C-S-SPC") 'set-rectangular-region-anchor)
-  (global-set-key (kbd "C-M-=") 'mc/insert-numbers)
-  (global-set-key (kbd "C-*") 'mc/mark-all-like-this)
-  (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click))
-
-(with-eval-after-load "expand-region-autoloads"
-    (global-set-key (kbd "C-=") 'er/expand-region))
-
 ;;;; Language Settings
 (defvar c-basic-offset 2)  ; for c++
 (defvar standard-indent 2) ; for most things
@@ -101,6 +80,7 @@
 			(other . "bsd")))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 (global-auto-revert-mode 1)
 (delete-selection-mode 1)
 
@@ -150,9 +130,23 @@
     (with-eval-after-load "color-theme-solarized-autoloads"
       (load-theme 'solarized-light t)))
 
-;; Custom
-(custom-set-variables
- )
+;;;; Global Key Bindings
+(global-set-key (kbd "<C-prior>") 'previous-buffer)
+(global-set-key (kbd "<C-next>") 'next-buffer)
 
-(custom-set-faces
- )
+(with-eval-after-load "multiple-cursors-autoloads"
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C-S-c C-e") 'mc/edit-ends-of-lines)
+  (global-set-key (kbd "C-S-c C-a") 'mc/edit-beginnings-of-lines)
+  (global-set-key (kbd "C-.") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C->") 'mc/skip-to-next-like-this)
+  (global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-<") 'mc/skip-to-previos-like-this)
+  (global-set-key (kbd "C-<return>") 'mc/mark-more-like-this-extended)
+  (global-set-key (kbd "C-S-SPC") 'set-rectangular-region-anchor)
+  (global-set-key (kbd "C-M-=") 'mc/insert-numbers)
+  (global-set-key (kbd "C-*") 'mc/mark-all-like-this)
+  (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click))
+
+(with-eval-after-load "expand-region-autoloads"
+    (global-set-key (kbd "C-=") 'er/expand-region))
