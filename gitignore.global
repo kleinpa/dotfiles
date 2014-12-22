@@ -1,7 +1,8 @@
+*#
+*.lnk
+*.pjs.tcNET
+*.sln.cache
 *.sw[o|p|q]
 *~
-*#
-*.pjs.tcNET
+.#*
 Thumbs.db
-*.sln.cache
-*.lnk
