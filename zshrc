@@ -177,6 +177,11 @@ precmd_functions+='precmd_update_git_vars'
 chpwd_functions+='update_current_git_vars'
 update_current_git_vars
 
+if command -v virtualenvwrapper.sh >/dev/null 2>/dev/null; then
+    source virtualenvwrapper.sh
+fi
+
+
 # Allow subsitutuion in prompt.
 setopt prompt_subst
 
