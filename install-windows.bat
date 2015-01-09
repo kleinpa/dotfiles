@@ -10,6 +10,11 @@ mklink "%USERPROFILE%\.gitignore.global" "%~dp0gitignore.global"
 del /f /q "%USERPROFILE%\.gitconfig"
 mklink "%USERPROFILE%\.gitconfig" "%~dp0gitconfig"
 
+rem ssh
+mkdir "%USERPROFILE%\.ssh\"
+del /f /q "%USERPROFILE%\.ssh\config"
+mklink "%USERPROFILE%\.ssh\config" "%~dp0ssh\config"
+
 rem Vagrant
 mkdir "%USERPROFILE%\.vagrant.d\Vagrantfile"
 del /f /q "%USERPROFILE%\.vagrant.d\Vagrantfile"
