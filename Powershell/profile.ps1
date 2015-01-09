@@ -95,3 +95,5 @@ if (Test-Path (Join-Path $env:USERPROFILE projects))
 }
 
 Set-Alias vs Import-VisualStudioVars
+
+Import-Module virtualenvwrapper
