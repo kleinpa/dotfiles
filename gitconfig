@@ -54,7 +54,8 @@
 	unignore = update-index --no-assume-unchanged
 	unignore-all = !git ignored | xargs git unignore
 	woops = commit --amend --no-edit
-    g = grep --break --heading --line-number
+	g = grep --break --heading --line-number
+    	fresh = !git clean -fxd && git checkout -- .
 [push]
 	default = upstream
 [grep]
