@@ -11,6 +11,9 @@ if ($PSVersionTable.PSVersion.Major -ge 3)
     Set-PSReadlineKeyHandler -Key Ctrl+P -Function PreviousHistory
     Set-PSReadlineKeyHandler -Key Ctrl+N -Function NextHistory
     Set-PSReadlineKeyHandler -Key Ctrl+G -Function RevertLine
+    Set-PSReadlineKeyHandler -Key Ctrl+Backspace -Function KillWord
+    Set-PSReadlineKeyHandler -Key Ctrl+Shift+Backspace -Function KillWord
+    Set-PSReadlineKeyHandler -Key Shift+Backspace -Function KillWord
 
     # Would be nice to just disable syntax coloring, now sure how though
     Set-PSReadlineOption -ForegroundColor White -TokenKind Command
@@ -55,10 +58,18 @@ function prompt
     }
     Write-Host ("]") -nonewline -foregroundcolor DarkGray
     $global:LASTEXITCODE = $realLASTEXITCODE
-    return " "
+    if (Test-Admin)
+    {
+        return "# "
+    }
+    else
+    {
+        return "% "
+    }
 }
 
-function time {
+function time
+{
     $sw = [Diagnostics.Stopwatch]::StartNew()
     $args
     $sw.Stop()
@@ -73,7 +84,7 @@ function env
 Set-Alias wc Measure-Object
 Set-Alias open Invoke-Item
 
-function emacs {emacsclientw -na runemacs $args}
+function emacs { emacsclientw -na runemacs (Get-Item $args).FullName }
 Set-Alias e "emacs"
 
 function cygwin {C:\cygwin64\bin\zsh.exe}
