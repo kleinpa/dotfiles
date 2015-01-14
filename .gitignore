@@ -1,6 +1,3 @@
-/emacs.d/*
-!/emacs.d/init.el
-!/emacs.d/rc/
 *.sw[o|p]
 *~
 *.local*

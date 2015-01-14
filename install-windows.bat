@@ -1,8 +1,9 @@
 rem @echo off
 
 rem Emacs
-rd /s /q "%USERPROFILE%\AppData\Roaming\.emacs.d"
-mklink /d "%USERPROFILE%\AppData\Roaming\.emacs.d" "%~dp0emacs.d"
+mkdir "%USERPROFILE%\AppData\Roaming\.emacs.d"
+del /f /q "%USERPROFILE%\AppData\Roaming\.emacs.d\init.el"
+mklink "%USERPROFILE%\AppData\Roaming\.emacs.d\init.el" "%~dp0emacs.d\init.el"
 
 rem Git
 del /f /q "%USERPROFILE%\.gitignore.global"
