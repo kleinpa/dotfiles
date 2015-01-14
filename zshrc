@@ -9,9 +9,6 @@ alias ll='ls -ahl'
 alias less='less -I'
 alias l='less'
 
-alias cl='clear && pwd && ls'
-
-alias g=git
 
 alias e='$EDITOR'
 
@@ -40,43 +37,9 @@ elif [[ -n $(command -v nano) ]]; then
     export GIT_EDITOR=nano
 fi
 
-alias subl=sublime_text
 #########################################################
 #                      commonfunc                       #
 #########################################################
-
-# helper function to search the $PATH for a given
-# executable.  useful for checks across different
-# systems.
-checkPath() {
-    local execpath
-    local OIFS
-    # the bash compatible version of this
-    OIFS=$IFS
-    IFS=':'
-    for dir in $PATH
-    do
-        execpath="$dir/$1"
-        if [ -x $execpath ]; then
-            IFS=$OIFS
-            return 0
-        fi
-    done
-
-    # set the file separator back to normal
-    IFS=$OIFS
-
-    # the zsh compatible version
-    for dir in $path
-    do
-        execpath="$dir/$1"
-        if [ -x $execpath ]; then
-            return 0
-        fi
-    done
-
-    return 1
-}
 
 # for linux
 # Pretty LS_COLORS explanation:
@@ -130,9 +93,6 @@ autoload -U compinit
 compinit -C
 # case-insensitive (all),partial-word and then substring completion
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-
-# uncomment this to show when you aren't the current user
-ME="kleinpa"
 
 if [[ "$TERM" != emacs ]]; then
 [[ -z "$terminfo[kdch1]" ]] || bindkey -M emacs "$terminfo[kdch1]" delete-char
