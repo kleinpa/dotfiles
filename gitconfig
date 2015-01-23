@@ -24,14 +24,6 @@
        untracked = cyan
        deleted = red
        branch = blue
-[diff]
-	tool = diffmerge
-[difftool "diffmerge"]
-	cmd = sgdm_cygwin.sh /p1=\"$LOCAL\" /p2=\"$REMOTE\"
-[merge]
-	tool = diffmerge
-[mergetool "diffmerge"]
-	cmd = sgdm_cygwin.sh /merge /result=\"$MERGED\" /p1=\"$LOCAL\" /p2=\"$BASE\" /p3=\"$REMOTE\"
 [alias]
 	a = add
 	ai = add --interactive
@@ -39,23 +31,19 @@
 	c = commit
 	b = branch -vv
 	co = checkout
-	df = difftool --dir-diff
 	wd = diff --word-diff="color"
 	lg = log
 	lgg = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	p = push
-	fn = diff-tree --no-commit-id --name-only -r
 	ac = !git add -A && git commit
 	pr = pull --rebase
-	hub-url = !git config remote.origin.url | sed -e 's/git@\\(.*\\?\\):\\(.*\\?\\).git/http:\\/\\/\\1\\/\\2/' | sed -e 's/\\.git//'
-	hub = "!f(){ if [[ $1 ]]; then cygstart `git hub-url`/commit/`git rev-parse $1`; else cygstart `git hub-url`; fi; }; f"
+	woops = commit --amend --no-edit
+	g = grep --break --heading --line-number
+    	fresh = !git clean -fxd && git checkout -- .
 	ignored = !git ls-files -v | sed -n 's/^[[:lower:]] //p'
 	ignore = update-index --assume-unchanged
 	unignore = update-index --no-assume-unchanged
 	unignore-all = !git ignored | xargs git unignore
-	woops = commit --amend --no-edit
-	g = grep --break --heading --line-number
-    	fresh = !git clean -fxd && git checkout -- .
 [push]
 	default = upstream
 [grep]
