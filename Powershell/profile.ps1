@@ -97,3 +97,29 @@ if (Test-Path (Join-Path $env:USERPROFILE projects))
 Set-Alias vs Import-VisualStudioVars
 
 Import-Module virtualenvwrapper
+
+function Cygwin-Execute
+{
+    If(!$Args)
+    {
+        Write-Host "Usage: $($MyInvocation.MyCommand) [command ...]"
+        Write-Host ""
+        Write-Host "Runs the command from a Cygwin shell."
+    }
+    else
+    {
+        If (Test-Path hklm:software\cygwin\setup)
+        {
+            $cygroot = (Get-ItemProperty hklm:software\cygwin\setup).rootdir
+        }
+        If (!$cygroot)
+        {
+            Write-Error "Cygwin is not installed or can not be found"
+            Return
+        }
+        $env:CHERE_INVOKING=1
+        & "$cygroot\bin\sh.exe" --login -c "$Args"
+    }
+}
+
+Set-Alias c Cygwin-Execute
