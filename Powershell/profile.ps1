@@ -84,7 +84,20 @@ function env
 Set-Alias wc Measure-Object
 Set-Alias open Invoke-Item
 
-function emacs { emacsclientw -na runemacs (Get-Item $args).FullName }
+function emacs
+{
+    $TEMP_HOME=$Env:HOME
+    Remove-Item Env:HOME
+    If(!$Args)
+    {
+        emacsclientw -na runemacs (Get-Item $Pwd).FullName
+    }
+    else
+    {
+        emacsclientw -na runemacs (Get-Item $Args).FullName
+    }
+    $Env:HOME=$TEMP_HOME
+}
 Set-Alias e "emacs"
 
 function cygwin {C:\cygwin64\bin\zsh.exe}
