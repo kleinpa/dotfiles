@@ -34,6 +34,10 @@ mkdir "%USERPROFILE%\AppData\Roaming\Sublime Text 3\Packages"
 rd /s /q "%USERPROFILE%\AppData\Roaming\Sublime Text 3\Packages\User"
 mklink /d "%USERPROFILE%\AppData\Roaming\Sublime Text 3\Packages\User" "%~dp0Sublime Text"
 
+rem atom
+rd /S /q "%USERPROFILE%\.atom"
+mklink /d "%USERPROFILE%\.atom" "%~dp0atom"
+
 rem Powershell
 mkdir "%USERPROFILE%\Documents\WindowsPowerShell\"
 del /f /q "%USERPROFILE%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
