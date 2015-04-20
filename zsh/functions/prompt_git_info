@@ -1,5 +1,5 @@
 if [ -n "$__CURRENT_GIT_BRANCH" ]; then
-    local s="("
+    local s="$C0($C2"
     s+="$__CURRENT_GIT_BRANCH"
     case "$__CURRENT_GIT_BRANCH_STATUS" in
         ahead)
@@ -18,8 +18,7 @@ if [ -n "$__CURRENT_GIT_BRANCH" ]; then
     if [ -n "$__CURRENT_GIT_TIMEOUT" ]; then
         s+="?"
     fi
-    s+=")"
+    s+="$C0)"
 
     printf " %s%s" "%{${fg[yellow]}%}" $s
 fi
-

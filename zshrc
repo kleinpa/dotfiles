@@ -146,17 +146,21 @@ fi
 setopt prompt_subst
 
 # Color Definitions
-C0=$'%{\e[1;33m%}'     # White for [ : ]
-C1=$'%{\e[1;31m%}'     # Color for name, system, directory
-C2=$'%{\e[0m%}'        # Color for averything after prompt
-C3=$'%{\e[0;34m%}'     # Color for GIT info
+# colors       : black red green yellow blue magenta cyan white
+# $k %K{color} : background
+# $f %F{color} : forground
+# %b %B        : bold
+
+C0=$'%{%b%k%F{white}%}'     # White for @ : () %
+C1=$'%{%b%k%F{magenta}%}'     # Color for name, system, directory
+C2=$'%{%b%k%F{blue}%}'     # Color for GIT info
 
 if [[ -e ~/.zshrc.local ]]; then
-    source ~/.zshrc.local
+   source ~/.zshrc.local
 fi
 
 # Set the prompt.
-PROMPT='$C0%}[$C1%n$C0@$C1%m$C0:$C1%c$C3$(prompt_git_info)$C0]$C2%# '
+PROMPT='$C1%n$C0@$C1%m$C0:$C1%c$(prompt_git_info)$C0%#%{%b%k%f%} '
 
 if [[ $(uname) = "CYGWIN"* ]]; then
     if [[ -e ~/.zshrc.cygwin ]]; then
