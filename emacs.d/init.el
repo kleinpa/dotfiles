@@ -59,6 +59,7 @@
       markdown-mode
       multiple-cursors
       pretty-lambdada
+      projectile
       smartparens
       web-beautify
       ))
@@ -83,6 +84,9 @@
 
 (global-auto-revert-mode 1)
 (delete-selection-mode 1)
+
+(with-eval-after-load "projectile-autoloads"
+  (projectile-global-mode))
 
 (with-eval-after-load "electric-autoloads"
   (electric-indent-mode 1))
@@ -153,3 +157,7 @@
 
 (with-eval-after-load "expand-region-autoloads"
     (global-set-key (kbd "C-=") 'er/expand-region))
+
+(with-eval-after-load "magit-autoloads"
+  (global-set-key (kbd "C-x g") 'magit-status)
+  (global-set-key (kbd "C-x G") 'magit-blame-mode))
