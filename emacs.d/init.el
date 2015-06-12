@@ -141,6 +141,8 @@
 (global-set-key (kbd "<C-prior>") 'previous-buffer)
 (global-set-key (kbd "<C-next>") 'next-buffer)
 
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
 (with-eval-after-load "multiple-cursors-autoloads"
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
   (global-set-key (kbd "C-S-c C-e") 'mc/edit-ends-of-lines)
