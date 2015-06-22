@@ -46,7 +46,6 @@
 
   (defvar my-packages
     '(auctex
-      color-theme-solarized
       erlang
       expand-region
       git-gutter
@@ -133,9 +132,7 @@
 (when window-system
     (tool-bar-mode 0)
     (scroll-bar-mode 0)
-    (menu-bar-mode 0)
-    (with-eval-after-load "color-theme-solarized-autoloads"
-      (load-theme 'solarized-light t)))
+    (menu-bar-mode 0))
 
 ;;;; Global Key Bindings
 (global-set-key (kbd "<C-prior>") 'previous-buffer)
