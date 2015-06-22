@@ -139,15 +139,16 @@
 (global-set-key (kbd "<C-next>") 'next-buffer)
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-c C-m") 'compile)
 
 (with-eval-after-load "multiple-cursors-autoloads"
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
   (global-set-key (kbd "C-S-c C-e") 'mc/edit-ends-of-lines)
   (global-set-key (kbd "C-S-c C-a") 'mc/edit-beginnings-of-lines)
   (global-set-key (kbd "M-.") 'mc/mark-next-like-this)
-  (global-set-key (kbd "M->") 'mc/skip-to-next-like-this)
+  (global-set-key (kbd "C->") 'mc/skip-to-next-like-this)
   (global-set-key (kbd "M-,") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "M-<") 'mc/skip-to-previos-like-this)
+  (global-set-key (kbd "C-<") 'mc/skip-to-previos-like-this)
   (global-set-key (kbd "C-<return>") 'mc/mark-more-like-this-extended)
   (global-set-key (kbd "C-S-SPC") 'set-rectangular-region-anchor)
   (global-set-key (kbd "C-M-=") 'mc/insert-numbers)
