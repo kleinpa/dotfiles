@@ -35,9 +35,23 @@ function Test-Admin
     (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 }
 
+function Notify-Done
+{
+    if($Args[0] -like "c make*")
+    {
+	$_song = Join-Path (Join-Path ($PSScriptRoot) "Modules") "done.wav"
+	Add-Type -AssemblyName PresentationCore
+	$_MediaPlayer = New-Object System.Windows.Media.MediaPlayer
+	$_MediaPlayer.Open($_song)
+	$_MediaPlayer.Volume = 1
+	$_MediaPlayer.Play()
+    }
+}
+
 function prompt
 {
     $realLASTEXITCODE = $LASTEXITCODE
+    Notify-Done(Get-History -count 1)
     Write-Host ("[") -nonewline -foregroundcolor DarkGray
     Write-Host ([Environment]::UserName) -nonewline -foregroundcolor Gray
     if (Test-Admin)
