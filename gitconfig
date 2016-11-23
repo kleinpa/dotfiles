@@ -1,6 +1,6 @@
 [user]
 	name = Peter Klein
-	email = peter@uytr.org
+	email = kleinpa00@gmail.com
 [core]
 	editor = $GIT_EDITOR
 	excludesfile = ~/.gitignore.global
@@ -45,7 +45,8 @@
 	unignore = update-index --no-assume-unchanged
 	unignore-all = !git ignored | xargs git unignore
 	pk = cherry-pick
-	cfxd = !git clean -fxd
+	cfxd = "!git clean -fxdq; git submodule update --init --force --recursive; git submodule foreach --recursive 'git clean -fxd'"
+	lol = "!f() { while [[ $(git rev-parse --short HEAD) != aa* ]]; do git commit --amend --no-edit; done; }; f"
 [push]
 	default = upstream
 [grep]
