@@ -53,10 +53,13 @@ function prompt
     $realLASTEXITCODE = $LASTEXITCODE
     Notify-Done(Get-History -count 1)
     Write-Host ("[") -nonewline -foregroundcolor DarkGray
-    Write-Host ([Environment]::UserName) -nonewline -foregroundcolor Gray
     if (Test-Admin)
     {
-        Write-Host -NoNewLine -f red "+Admin"
+	Write-Host ([Environment]::UserName) -nonewline -foregroundcolor Red
+    }
+    else
+    {
+        Write-Host ([Environment]::UserName) -nonewline -foregroundcolor Gray
     }
     if ($env:VisualStudioVersion)
     {
@@ -144,9 +147,23 @@ function Cygwin-Execute
             Write-Error "Cygwin is not installed or can not be found"
             Return
         }
-        $env:CHERE_INVOKING=1
-        & "$cygroot\bin\sh.exe" --login -c "$Args"
+
+	Try
+	{
+	    $TEMP_HOME=$Env:HOME
+	    $env:HOME="$cygroot\home\$([Environment]::UserName)"
+            $env:CHERE_INVOKING=1
+            & "$cygroot\bin\sh.exe" --login -c "$Args"
+	}
+	Finally
+	{
+            $Env:HOME=$TEMP_HOME
+	}
     }
 }
 
 Set-Alias c Cygwin-Execute
+
+function which ([string] $cmd) {
+    $path = (Get-Command $cmd).Path
+}
