@@ -46,7 +46,7 @@
 	unignore-all = !git ignored | xargs git unignore
 	pk = cherry-pick
 	cfxd = "!git clean -fxdq; git submodule update --init --force --recursive; git submodule foreach --recursive 'git clean -fxd'"
-	lol = "!f() { while [[ $(git rev-parse --short HEAD) != aa* ]]; do git commit --amend --no-edit; done; }; f"
+	spell = "!f() { while [[ $(git rev-parse --short HEAD) != "$1*" ]]; do git commit --amend --no-edit; done; }; f"
 [push]
 	default = upstream
 [grep]
