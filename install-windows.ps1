@@ -44,14 +44,6 @@ if("ssh" -in $Configs -Or "All" -in $Configs) {
     New-SymLink "${UserProfile}\.ssh\config" "${PSScriptRoot}\ssh\config"
 }
 
-if("Vagrant" -in $Configs -Or "All" -in $Configs) {
-    Make-Directory "${UserProfile}\.vagrant.d\Vagrantfile"
-    Delete "${UserProfile}\.vagrant.d\Vagrantfile"
-    New-SymLink "${UserProfile}\.vagrant.d\Vagrantfile" "${PSScriptRoot}\vagrant.d\Vagrantfile"
-    rd /S /q "${UserProfile}\.vagrant.d\scripts"
-    New-SymLink /d "${UserProfile}\.vagrant.d\scripts" "${PSScriptRoot}\vagrant.d\scripts"
-}
-
 if("Putty" -in $Configs -Or "All" -in $Configs) {
     regedit /s "${PSScriptRoot}\\putty_default_settings.reg"
 }

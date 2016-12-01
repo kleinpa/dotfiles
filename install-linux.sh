@@ -20,10 +20,6 @@ ln -Tfs $(realpath `dirname $0`)/ssh/config ~/.ssh/config
 mkdir -p ~/.emacs.d
 ln -Tfs $(realpath `dirname $0`)/emacs.d/init.el ~/.emacs.d/init.el
 
-mkdir -p ~/.vagrant.d/
-ln -Tfs $(realpath `dirname $0`)/vagrant.d/Vagrantfile ~/.vagrant.d/Vagrantfile
-ln -Tfs $(realpath `dirname $0`)/vagrant.d/scripts ~/.vagrant.d/scripts
-
 mkdir -p ~/.config
 ln -Tfs $(realpath `dirname $0`)/awesome ~/.config/awesome
 
