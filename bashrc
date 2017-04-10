@@ -25,7 +25,14 @@ shopt -s nocaseglob
 umask 022
 
 C0="\[\033[1;37m\]"     # White for @ : () %
-C1="\[\033[0;35m\]"     # Color for name, system, directory
+C1="\[\033[1;35m\]"     # Color for name, system, directory
 C2="\[\033[1;34m\]"     # Color for GIT info
+
+
+if [[ -e ~/.bashrc.local ]]; then
+   source ~/.bashrc.local
+fi
+
+
 # Set the prompt.
 PS1="${C1}\u${C0}@${C1}\h${C0}:${C1}\w${C0}\[\033[0m\]\$ "

@@ -7,6 +7,7 @@ ln -Tfs "$(realpath `dirname $0`)/zshrc" ~/.zshrc
 ln -Tfs "$(realpath `dirname $0`)/zsh" ~/.zsh
 ln -Tfs "$(realpath `dirname $0`)/bashrc" ~/.bashrc
 ln -Tfs "$(realpath `dirname $0`)/bash_profile" ~/.bash_profile
+ln -Tfs "$(realpath `dirname $0`)/inputrc" ~/.inputrc
 ln -Tfs "$(realpath `dirname $0`)/vimrc" ~/.vimrc
 ln -Tfs "$(realpath `dirname $0`)/gitconfig" ~/.gitconfig
 ln -Tfs "$(realpath `dirname $0`)/gitignore.global" ~/.gitignore.global
