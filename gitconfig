@@ -37,7 +37,7 @@
 	p = push
 	ac = !git add -A && git commit
 	pr = pull --rebase
-	woops = commit --amend --no-edit
+	oops = commit --amend --no-edit
 	g = grep --break --heading --line-number
     	fresh = !git clean -fxd && git checkout -- .
 	ignored = !git ls-files -v | sed -n 's/^[[:lower:]] //p'
