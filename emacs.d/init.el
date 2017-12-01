@@ -1,5 +1,6 @@
 (prefer-coding-system 'utf-8-unix)
 
+(setq-default indent-tabs-mode nil)
 (setq inhibit-startup-message t)
 (setq require-final-newline nil)
 (put 'eval-expression 'disabled nil)
@@ -25,6 +26,7 @@
   (setq shell-file-name "bash")
   (setq explicit-shell-file-name "bash")
   (setq w32-quote-process-args ?\"))
+  (setq w32-quote-process-args ?\")
 
 ;;;; Macros
 
@@ -45,11 +47,13 @@
   (package-initialize)
 
   (defvar my-packages
-    '(auctex
+    '(
+      auctex
+      dockerfile-mode
       erlang
       expand-region
-      git-gutter
       gist
+      git-gutter
       go-mode
       js2-mode
       latex-preview-pane
@@ -57,10 +61,13 @@
       magit
       markdown-mode
       multiple-cursors
+      powershell
       pretty-lambdada
       projectile
+      scad-mode
       smartparens
       web-beautify
+      yaml-mode
       ))
 
   (defun install-my-packages ()
@@ -161,3 +168,26 @@
 (with-eval-after-load "magit-autoloads"
   (global-set-key (kbd "C-x g") 'magit-status)
   (global-set-key (kbd "C-x G") 'magit-blame-mode))
+
+(with-eval-after-load "eshell"
+  (add-hook
+   'eshell-mode-hook
+   (lambda ()
+     (setq pcomplete-cycle-completions nil)))
+  (setq eshell-prompt-function
+	(lambda ()
+	  (format (propertize "[%s@%s:%s]%s" 'face `(:foreground "gray"))
+		   (propertize (user-login-name) 'face `(:foreground "dim gray"))
+		   (propertize (system-name) 'face `(:foreground "dim gray"))
+		   (propertize (file-name-base (eshell/pwd)) 'face `(:foreground "dim gray"))
+		   (propertize (if (= (user-uid) 0) "# " "$ ") 'face `(:foreground "black"))
+		   )))
+  (setq eshell-prompt-regexp "\\[.*?@.*?:*?\\][$#] ")
+  (setq eshell-banner-message "")
+
+  (defun eshell/e (&rest args)
+    (mapc #'find-file (mapcar #'expand-file-name (eshell-flatten-list (reverse args)))))
+  (defun eshell/dc () "docker-compose up") )
+
+(global-set-key (kbd "C-c e") 'eshell)
+(global-set-key (kbd "C-c s") 'shell)
