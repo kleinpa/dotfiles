@@ -100,7 +100,8 @@
 
 (with-eval-after-load "smartparens-autoloads"
   (smartparens-global-mode t)
-  (sp-local-pair '(scheme-mode emacs-lisp-mode) "'" nil :actions nil))
+  (sp-local-pair '(scheme-mode emacs-lisp-mode) "'" nil :actions nil)
+  (sp-local-pair '(scheme-mode emacs-lisp-mode) "`" nil :actions nil))
 
 (with-eval-after-load "pretty-lambdada-autoloads"
   (pretty-lambda-for-modes))
