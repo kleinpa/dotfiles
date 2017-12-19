@@ -1,5 +1,6 @@
 (prefer-coding-system 'utf-8-unix)
 
+(setq vc-follow-symlinks t)
 (setq-default indent-tabs-mode nil)
 (setq inhibit-startup-message t)
 (setq require-final-newline nil)
@@ -168,6 +169,10 @@
 (with-eval-after-load "magit-autoloads"
   (global-set-key (kbd "C-x g") 'magit-status)
   (global-set-key (kbd "C-x G") 'magit-blame-mode))
+
+(with-eval-after-load "shell"
+  (set-face-attribute 'comint-highlight-prompt nil
+                                          :inherit nil))
 
 (with-eval-after-load "eshell"
   (add-hook

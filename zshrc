@@ -167,3 +167,7 @@ if [[ $(uname) = "CYGWIN"* ]]; then
 	source ~/.zshrc.cygwin
     fi
 fi
+
+[[ $EMACS = t ]] && unsetopt zle
+
+export TERM=xterm-256color
