@@ -137,6 +137,9 @@
 ;; CSS
 (setq css-indent-offset 2)
 
+;; Shell
+(add-to-list 'auto-mode-alist '("\\.?*shrc$" . sh-mode))
+
 ;; Styles
 (when window-system
     (tool-bar-mode 0)
