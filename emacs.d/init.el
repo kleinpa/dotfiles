@@ -20,7 +20,7 @@
     )
 (when (eq system-type 'windows-nt)
   (setq explicit-cmdproxy.exe-args '("-- /q"))
-  (set-default-font "Consolas-9")
+  (set-default-font "Consolas-10")
   (setq exec-path (cons "c:/cygwin64/bin" exec-path))
   (setenv "PATH" (concat "c:\\cygwin64\\bin;" (getenv "PATH")))
   (setq process-coding-system-alist '(("bash" . undecided-unix)))
@@ -50,6 +50,7 @@
   (defvar my-packages
     '(
       auctex
+      color-theme-sanityinc-tomorrow
       dockerfile-mode
       erlang
       expand-region
@@ -139,12 +140,19 @@
 
 ;; Shell
 (add-to-list 'auto-mode-alist '("\\.?*shrc$" . sh-mode))
+(add-to-list 'auto-mode-alist '("\*profile$" . sh-mode))
 
 ;; Styles
-(when window-system
-    (tool-bar-mode 0)
-    (scroll-bar-mode 0)
-    (menu-bar-mode 0))
+
+(menu-bar-mode 0)
+
+(when (display-graphic-p)
+  (tool-bar-mode 0)
+  (scroll-bar-mode 0))
+
+(unless (display-graphic-p)
+  (add-hook 'after-init-hook
+            (lambda () (load-theme 'sanityinc-tomorrow-bright t))))
 
 ;;;; Global Key Bindings
 (global-set-key (kbd "<C-prior>") 'previous-buffer)
@@ -175,8 +183,8 @@
   (global-set-key (kbd "C-x G") 'magit-blame-mode))
 
 (with-eval-after-load "shell"
-  (set-face-attribute 'comint-highlight-prompt nil
-                                          :inherit nil))
+  (set-face-attribute 'comint-highlight-prompt nil :inherit nil)
+  (setq comint-process-echoes t))
 
 (with-eval-after-load "eshell"
   (add-hook

@@ -1,2 +1,2 @@
-if [ -f ~/.bashrc ]; then . ~/.bashrc; fi
-if tty -s; then . /usr/share/bash-completion/bash_completion; fi
+[ -f /etc/bash_completion ] && ! shopt -oq posix && . /etc/bash_completion
+[ -r ~/.bashrc ] && . ~/.bashrc
