@@ -193,13 +193,13 @@
      (setq pcomplete-cycle-completions nil)))
   (setq eshell-prompt-function
 	(lambda ()
-	  (format (propertize "[%s@%s:%s]%s" 'face `(:foreground "gray"))
+	  (format (propertize "%s@%s:%s%s" 'face `(:foreground "gray"))
 		   (propertize (user-login-name) 'face `(:foreground "dim gray"))
-		   (propertize (system-name) 'face `(:foreground "dim gray"))
+		   (propertize (car (split-string (system-name) "\\.")) 'face `(:foreground "dim gray"))
 		   (propertize (file-name-base (eshell/pwd)) 'face `(:foreground "dim gray"))
-		   (propertize (if (= (user-uid) 0) "# " "$ ") 'face `(:foreground "black"))
+		   (propertize (if (= (user-uid) 0) "# " "$ ") 'face `(:foreground nil))
 		   )))
-  (setq eshell-prompt-regexp "\\[.*?@.*?:*?\\][$#] ")
+  (setq eshell-prompt-regexp "\\.*?[$#] ")
   (setq eshell-banner-message "")
 
   (defun eshell/e (&rest args)

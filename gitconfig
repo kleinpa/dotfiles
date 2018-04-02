@@ -7,23 +7,6 @@
 	pager = less
 [color]
 	ui = true
-[color "branch"]
-       current = blue bold
-       local = green bold
-       remote = red
-       upstream = black white ul
-       plain = red green
-[color "diff"]
-       meta = yellow bold
-       frag = magenta bold
-       old = red bold
-       new = green bold
-[color "status"]
-       added = yellow
-       #changed = green
-       untracked = cyan
-       deleted = red
-       branch = blue
 [alias]
 	a = add
 	ai = add --interactive
@@ -38,6 +21,7 @@
 	ac = !git add -A && git commit
 	pr = pull --rebase
 	oops = commit --amend --no-edit
+        e = commit --amend --no-edit
 	g = grep --break --heading --line-number
     	fresh = !git clean -fxd && git checkout -- .
 	ignored = !git ls-files -v | sed -n 's/^[[:lower:]] //p'

@@ -1,5 +1,8 @@
-export EDITOR=emacs
+[ -r ~/.profile.local ] && . ~/.profile.local
 
-if [[ -e ~/.profile.local ]]; then
-    source ~/.profile.local
+if [ -n $(command -v emacs) ]; then
+    export EDITOR=emacs
+    export GIT_EDITOR="emacs -nw"
+elif [[ -n $(command -v nano) ]]; then
+    export EDITOR=nano
 fi
