@@ -1,7 +1,9 @@
 if (Get-Command "git.exe" -ErrorAction SilentlyContinue)
 {
-    Import-Module posh-git
-    Enable-GitColors
+    if (Get-Module -ListAvailable -Name posh-git) {
+        Import-Module posh-git
+        Enable-GitColors
+    }
 }
 
 if ($PSVersionTable.PSVersion.Major -ge 3)
@@ -126,43 +128,41 @@ if (Test-Path (Join-Path $env:USERPROFILE projects))
 
 Set-Alias vs Import-VisualStudioVars
 
-Import-Module virtualenvwrapper
-
-function Cygwin-Execute
-{
-    If(!$Args)
-    {
-        Write-Host "Usage: $($MyInvocation.MyCommand) [command ...]"
-        Write-Host ""
-        Write-Host "Runs the command from a Cygwin shell."
-    }
-    else
-    {
-        If (Test-Path hklm:software\cygwin\setup)
-        {
-            $cygroot = (Get-ItemProperty hklm:software\cygwin\setup).rootdir
-        }
-        If (!$cygroot)
-        {
-            Write-Error "Cygwin is not installed or can not be found"
-            Return
-        }
-
-	Try
-	{
-	    $TEMP_HOME=$Env:HOME
-	    $env:HOME="$cygroot\home\$([Environment]::UserName)"
-            $env:CHERE_INVOKING=1
-            & "$cygroot\bin\sh.exe" --login -c "$Args"
-	}
-	Finally
-	{
-            $Env:HOME=$TEMP_HOME
-	}
-    }
+if (Get-Module -ListAvailable -Name virtualenvwrapper) {
+    Import-Module virtualenvwrapper
 }
 
-Set-Alias c Cygwin-Execute
+If (Test-Path hklm:software\cygwin\setup)
+{
+
+    function Cygwin-Execute
+    {
+        If(!$Args)
+        {
+            Write-Host "Usage: $($MyInvocation.MyCommand) [command ...]"
+            Write-Host ""
+            Write-Host "Runs the command from a Cygwin shell."
+        }
+        else
+        {
+            $cygroot = (Get-ItemProperty hklm:software\cygwin\setup).rootdir
+
+	    Try
+	    {
+	        $TEMP_HOME=$Env:HOME
+	        $env:HOME="$cygroot\home\$([Environment]::UserName)"
+                $env:CHERE_INVOKING=1
+            & "$cygroot\bin\sh.exe" --login -c "$Args"
+	    }
+	    Finally
+	    {
+                $Env:HOME=$TEMP_HOME
+	    }
+        }
+    }
+
+    Set-Alias c Cygwin-Execute
+}
 
 function which ([string] $cmd) {
     $path = (Get-Command $cmd).Path
