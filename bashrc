@@ -101,3 +101,8 @@ alias ll='ls -ahl'
 alias ls="ls --color=auto --file-type"
 alias ls='ls --color=auto'
 alias mv='mv -i'
+
+# Windows Subsystem for Linux
+if grep -q Microsoft /proc/version; then
+    alias emacs='emacsclientw.exe -na runemacs'
+fi
