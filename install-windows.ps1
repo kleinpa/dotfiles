@@ -71,3 +71,14 @@ if("Powershell" -in $Configs -Or "All" -in $Configs) {
     New-SymLink /d "${UserProfile}\Documents\WindowsPowerShell\Modules" "${PSScriptRoot}\Powershell\Modules"
     "${PSScriptRoot}\Powershell\setup.bat"
 }
+
+if("WSL" -in $Configs -Or "All" -in $Configs) {
+    if (Get-Command "bash.exe" -ErrorAction SilentlyContinue)
+    {
+        $WSLHome = $(Invoke-Command {cd ~; bash -c pwd})
+        Push-Location "${PSScriptRoot}"
+        bash.exe -c "ln -s ${WSLHome}/Projects ~/projects"
+        bash.exe -c "~/projects/dotfiles/install-linux.sh"
+        Pop-Location
+    }
+}
