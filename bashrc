@@ -105,4 +105,5 @@ alias mv='mv -i'
 # Windows Subsystem for Linux
 if grep -q Microsoft /proc/version; then
     alias emacs='emacsclientw.exe -na runemacs'
+    alias open='cmd.exe /c START'
 fi
