@@ -15,6 +15,11 @@
 (show-paren-mode 1)
 (setq blink-matching-paren-distance nil)
 
+;; User Load Path
+(add-to-list 'load-path (concat user-emacs-directory
+                                (convert-standard-filename "lisp/")))
+(load "becls-scheme")
+
 ;;;; Platform-specific Settings
 (when (eq system-type 'gnu/linux)
     )

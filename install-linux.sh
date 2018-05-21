@@ -22,11 +22,9 @@ ln -Tfs "$(realpath `dirname $0`)/ssh/config" ~/.ssh/config
 
 mkdir -p ~/.emacs.d
 ln -Tfs "$(realpath `dirname $0`)/emacs.d/init.el" ~/.emacs.d/init.el
+ln -Tfs "$(realpath `dirname $0`)/emacs.d/lisp" ~/.emacs.d/lisp
 
 mkdir -p ~/.config
 ln -Tfs "$(realpath `dirname $0`)/awesome" ~/.config/awesome
-
-mkdir -p ~/.config/sublime-text-3
-ln -Tfs "$(realpath `dirname $0`)/Sublime Text" ~/.config/sublime-text-3/Packages
 
 touch ~/.hushlogin

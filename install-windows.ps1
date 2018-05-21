@@ -29,6 +29,7 @@ if("Emacs" -in $Configs -Or "All" -in $Configs) {
     Make-Directory "${ApplicationData}\.emacs.d"
     Delete "${ApplicationData}\.emacs.d\init.el"
     New-SymLink "${ApplicationData}\.emacs.d\init.el" "${PSScriptRoot}\emacs.d\init.el"
+    New-SymLink "${ApplicationData}\.emacs.d\lisp" "${PSScriptRoot}\emacs.d\lisp"
 }
 
 if("Git" -in $Configs -Or "All" -in $Configs) {
