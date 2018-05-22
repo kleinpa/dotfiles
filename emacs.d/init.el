@@ -147,8 +147,10 @@
 (add-to-list 'auto-mode-alist '("\\.?*shrc$" . sh-mode))
 (add-to-list 'auto-mode-alist '("\*profile$" . sh-mode))
 
-;; Styles
+;; Make
+(add-to-list 'auto-mode-alist '("\\/Mf-" . makefile-mode))
 
+;; Styles
 (menu-bar-mode 0)
 
 (when (display-graphic-p)
