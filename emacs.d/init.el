@@ -22,6 +22,7 @@
 
 ;;;; Platform-specific Settings
 (when (eq system-type 'gnu/linux)
+  (set-default-font "Source Code Pro-10")
     )
 (when (eq system-type 'windows-nt)
   (setq explicit-cmdproxy.exe-args '("-- /q"))
