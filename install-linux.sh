@@ -13,6 +13,7 @@ ln -Tfs "$(realpath `dirname $0`)/gitconfig" ~/.gitconfig
 ln -Tfs "$(realpath `dirname $0`)/gitignore.global" ~/.gitignore.global
 ln -Tfs "$(realpath `dirname $0`)/minttyrc" ~/.minttyrc
 ln -Tfs "$(realpath `dirname $0`)/Xresources" ~/.Xresources
+ln -Tfs "$(realpath `dirname $0`)/Xresources" ~/.Xdefaults
 ln -Tfs "$(realpath `dirname $0`)/xinitrc" ~/.xinitrc
 ln -Tfs "$(realpath `dirname $0`)/profile" ~/.profile
 ln -Tfs "$(realpath `dirname $0`)/zprofile" ~/.zprofile
