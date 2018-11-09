@@ -17,6 +17,7 @@ ln -Tfs "$(realpath `dirname $0`)/Xresources" ~/.Xdefaults
 ln -Tfs "$(realpath `dirname $0`)/xinitrc" ~/.xinitrc
 ln -Tfs "$(realpath `dirname $0`)/profile" ~/.profile
 ln -Tfs "$(realpath `dirname $0`)/zprofile" ~/.zprofile
+ln -Tfs "$(realpath `dirname $0`)/tmux.conf" ~/.tmux.conf
 
 mkdir -p ~/.ssh
 ln -Tfs "$(realpath `dirname $0`)/ssh/config" ~/.ssh/config

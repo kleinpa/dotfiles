@@ -216,3 +216,6 @@
 
 (global-set-key (kbd "C-c e") 'eshell)
 (global-set-key (kbd "C-c s") 'shell)
+
+
+(xterm-mouse-mode 1)
