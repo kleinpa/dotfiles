@@ -1,3 +1,4 @@
+;;;; General
 (prefer-coding-system 'utf-8-unix)
 
 (setq vc-follow-symlinks t)
@@ -8,8 +9,9 @@
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
-;; Should be able to load multiple files into one emacs window
-(server-start)
+(xterm-mouse-mode 1)
+(global-auto-revert-mode 1)
+(delete-selection-mode 1)
 
 ;; Show matching paren or bracket when cursor is on or after it
 (show-paren-mode 1)
@@ -35,57 +37,32 @@
   (setq w32-quote-process-args ?\"))
   (setq w32-quote-process-args ?\")
 
-;;;; Macros
+;;;; Package Management
+(package-initialize)
 
-;; This seems to be needed before 24.4.
-(unless (fboundp 'with-eval-after-load)
-  (defmacro with-eval-after-load (mode &rest body)
-    "`eval-after-load' MODE evaluate BODY."
-    (declare (indent defun))
-    `(eval-after-load ,mode
-       '(progn ,@body))))
-
-;;;; Package Installation and Loading
-(require 'package nil t)
-(with-eval-after-load "package"
-  (setq package-user-dir "~/.emacs.d/elpa/")
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-  ;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
-  (package-initialize)
-
-  (defvar my-packages
-    '(
-      auctex
-      color-theme-sanityinc-tomorrow
-      dockerfile-mode
-      erlang
-      expand-region
-      gist
-      git-gutter
-      go-mode
-      js2-mode
-      latex-preview-pane
-      less-css-mode
-      magit
-      markdown-mode
-      multiple-cursors
-      powershell
-      pretty-lambdada
-      projectile
-      scad-mode
-      smartparens
-      web-beautify
-      yaml-mode
-      ))
-
-  (defun install-my-packages ()
-    "Install my packages."
-    (interactive)
-    (package-refresh-contents)
-    (mapc (lambda (package)
-	     (unless (package-installed-p package)
-	       (package-install package)))
-	  my-packages)))
+(customize-set-variable
+ 'package-selected-packages
+ `(auctex
+   color-theme-sanityinc-tomorrow
+   dockerfile-mode
+   erlang
+   expand-region
+   gist
+   git-gutter
+   go-mode
+   js2-mode
+   latex-preview-pane
+   less-css-mode
+   magit
+   markdown-mode
+   multiple-cursors
+   powershell
+   projectile
+   scad-mode
+   smartparens
+   web-beautify
+   yaml-mode
+   ))
 
 ;;;; Language Settings
 (defvar c-basic-offset 2)  ; for c++
@@ -95,9 +72,6 @@
 			(other . "bsd")))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(global-auto-revert-mode 1)
-(delete-selection-mode 1)
 
 (with-eval-after-load "projectile-autoloads"
   (projectile-global-mode))
@@ -217,5 +191,6 @@
 (global-set-key (kbd "C-c e") 'eshell)
 (global-set-key (kbd "C-c s") 'shell)
 
-
-(xterm-mouse-mode 1)
+;;;; Customize
+(setq custom-file "~/.emacs-custom.el")
+(and (file-exists-p custom-file) (load custom-file))
