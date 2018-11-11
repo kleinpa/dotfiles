@@ -103,7 +103,11 @@ build_prompt() {
   PREV_BG=""
   PS1=""
 
-  section 255 ${HOST_KEY_COLOR} "\u@\h"
+  if [ -n "${TMUX}" ] ; then
+      section 255 ${HOST_KEY_COLOR} ""
+  else
+      section 255 ${HOST_KEY_COLOR} "\u@\h"
+  fi
 
   if [ -n "${VCS}" ]; then
     section 15 245 " ${VCS}"
