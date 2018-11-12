@@ -1,7 +1,7 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-export PATH=$HOME/bin:$PATH
+export PATH=$HOME/bin:$HOME/.bin:$PATH
 
 hash -d p=~/projects/
 

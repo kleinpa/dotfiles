@@ -30,3 +30,5 @@ mkdir -p ~/.config
 ln -Tfs "$(realpath `dirname $0`)/awesome" ~/.config/awesome
 
 touch ~/.hushlogin
+
+ln -Tfs "$(realpath `dirname $0`)/bin" ~/.bin

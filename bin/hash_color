@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+hue_to_ansi256() {
+    # map hue (from 0-1536) to saturated ansi256 color
+    h=$1
+    s=$2
+
+    n=$(( ((h)/256)%6 ))
+
+    x=$((h%256))
+    y=$((256-x))
+
+    x=$((x*128/256))
+    y=$((y*128/256))
+
+    r=$(( (n==0? s   :(n==1? y   :(n==2? 0   :(n==3? 0   :(n==4? x   :(n==5? s   :0)))))) ))
+    g=$(( (n==0? x   :(n==1? s   :(n==2? s   :(n==3? y   :(n==4? 0   :(n==5? 0   :0)))))) ))
+    b=$(( (n==0? 0   :(n==1? 0   :(n==2? x   :(n==3? s   :(n==4? s   :(n==5? y   :0)))))) ))
+
+    printf "%3d" $(((r<75?0:(r-35)/40)*6*6+(g<75?0:(g-35)/40)*6+(b<75?0:(b-35)/40)+16))
+}
+
+INPUT=$(hostname)
+OUTPUT_FMT=$1
+SKIP_RED=1
+
+if [ -n $SKIP_RED ]; then
+    CKSUM="$(( $(cksum <<< ${INPUT} | cut -f 1 -d ' ') % 1280 + 128))"
+else
+    CKSUM="$(( $(cksum <<< ${INPUT\o} | cut -f 1 -d ' ') % 1536))"
+fi
+
+trim() { # https://stackoverflow.com/a/3352015
+    local var="$*"
+    # remove leading whitespace characters
+    var="${var#"${var%%[![:space:]]*}"}"
+    # remove trailing whitespace characters
+    var="${var%"${var##*[![:space:]]}"}"
+    echo -n "$var"
+}
+
+case $OUTPUT_FMT in
+    ansi180) trim $(hue_to_ansi256 $CKSUM 180);;
+    bg180)
+        tput setaf 15
+        tput setab $(hue_to_ansi256 $CKSUM 180)
+        ;;
+    host)
+        tput setaf 15
+        tput setab $(hue_to_ansi256 $CKSUM 180)
+        ;;
+esac
