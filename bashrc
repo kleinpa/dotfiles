@@ -24,10 +24,15 @@ if grep -q Microsoft /proc/version; then
     alias open='cmd.exe /c START'
 fi
 
+alias et="emacsclient -t"
+alias en="emacsclient -n"
+alias es="tmux split-pane emacsclient -t"
 #alias emacs='emacsclient -c -nw --alternate-editor="emacs"'
 export EDITOR="emacsclient --tty --alternate-editor \"\""
 export VISUAL="emacsclient --create-frame --no-wait --alternate-editor \"\""
 
+
+# History
 shopt -s checkwinsize
 shopt -s cmdhist
 shopt -s histappend
@@ -109,11 +114,15 @@ build_prompt() {
       section 255 ${HOST_KEY_COLOR} "\u@\h"
   fi
 
-  if [ -n "${VCS}" ]; then
-    section 15 245 " ${VCS}"
-  fi
+  GIT_BRANCH="$(__git_ps1 '%s')"
 
-  section 15 238 "\W"
+  if [[ -n "${GIT_BRANCH}" ]]; then
+    VCS_ROOT="$(git rev-parse --show-toplevel)"
+    section 15 245 "${VCS_ROOT##*/}  ${GIT_BRANCH}"
+    section 15 238 ".${PWD/$VCS_ROOT/}"
+  else
+    section 15 238 "\W"
+  fi
 
   PS1+="\[$(tput sgr0)$(tput setaf $PREV_BG)\]\[$(tput sgr0)\] "
 }
