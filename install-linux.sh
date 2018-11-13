@@ -1,34 +1,42 @@
+#!/usr/bin/env bash
+set -e
+
 command -v realpath >/dev/null 2>&1 || {
   echo "This script requires the program 'realpath', aborting.";
   exit 1;
 }
 
-ln -Tfs "$(realpath `dirname $0`)/zshrc" ~/.zshrc
-ln -Tfs "$(realpath `dirname $0`)/zsh" ~/.zsh
-ln -Tfs "$(realpath `dirname $0`)/bashrc" ~/.bashrc
-ln -Tfs "$(realpath `dirname $0`)/bash_profile" ~/.bash_profile
-ln -Tfs "$(realpath `dirname $0`)/inputrc" ~/.inputrc
-ln -Tfs "$(realpath `dirname $0`)/vimrc" ~/.vimrc
-ln -Tfs "$(realpath `dirname $0`)/gitconfig" ~/.gitconfig
-ln -Tfs "$(realpath `dirname $0`)/gitignore.global" ~/.gitignore.global
-ln -Tfs "$(realpath `dirname $0`)/minttyrc" ~/.minttyrc
-ln -Tfs "$(realpath `dirname $0`)/Xresources" ~/.Xresources
-ln -Tfs "$(realpath `dirname $0`)/Xresources" ~/.Xdefaults
-ln -Tfs "$(realpath `dirname $0`)/xinitrc" ~/.xinitrc
-ln -Tfs "$(realpath `dirname $0`)/profile" ~/.profile
-ln -Tfs "$(realpath `dirname $0`)/zprofile" ~/.zprofile
-ln -Tfs "$(realpath `dirname $0`)/tmux.conf" ~/.tmux.conf
+BASIC_LINK=(
+    bash_profile
+    bashrc
+    bashrc.d/aliases
+    bashrc.d/common
+    bashrc.d/history
+    bashrc.d/prompt
+    bin
+    emacs.d/init.el
+    emacs.d/lisp
+    gitconfig
+    gitignore.global
+    inputrc
+    minttyrc
+    profile
+    ssh/config
+    tmux.conf
+    vimrc
+    xinitrc
+    Xresources
+    Xresources
+    zprofile
+    zsh
+    zshrc
+)
 
-mkdir -p ~/.ssh
-ln -Tfs "$(realpath `dirname $0`)/ssh/config" ~/.ssh/config
-
-mkdir -p ~/.emacs.d
-ln -Tfs "$(realpath `dirname $0`)/emacs.d/init.el" ~/.emacs.d/init.el
-ln -Tfs "$(realpath `dirname $0`)/emacs.d/lisp" ~/.emacs.d/lisp
-
-mkdir -p ~/.config
-ln -Tfs "$(realpath `dirname $0`)/awesome" ~/.config/awesome
+for f in ${BASIC_LINK[@]}; do
+    [ -d "$(dirname ~/.${f})" ] || mkdir -p "$(dirname ~/.${f})"
+    ln -Tfs "$(realpath `dirname $0`)/${f}" "$HOME/.${f}"
+    echo "Linked .${f}"
+done
 
 touch ~/.hushlogin
-
-ln -Tfs "$(realpath `dirname $0`)/bin" ~/.bin
+mkdir -p ~/.config

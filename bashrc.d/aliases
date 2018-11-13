@@ -1,0 +1,21 @@
+hash -d p=~/projects/
+
+alias cp='cp -i'
+alias e='$EDITOR'
+alias ev='$VISUAL'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+alias l='less'
+alias less='less -I'
+alias ll='ls -ahl'
+alias ls="ls --color=auto --file-type"
+alias ls='ls --color=auto'
+
+alias mv='mv -i'
+alias et="emacsclient -t"
+alias en="emacsclient -n"
+alias es="tmux split-pane emacsclient -t"
+#alias emacs='emacsclient -c -nw --alternate-editor="emacs"'
+export EDITOR="emacsclient --tty --alternate-editor \"\""
+export VISUAL="emacsclient --create-frame --no-wait --alternate-editor \"\""
