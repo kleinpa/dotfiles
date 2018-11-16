@@ -11,19 +11,25 @@
 (show-paren-mode 1)
 (setq blink-matching-paren-distance nil)
 
+(setq make-backup-files nil) ; stop creating backup~ files
+(setq auto-save-default nil) ; stop creating #autosave# files
+
 ;;;; Package Management
-(require 'package)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
-(package-initialize)
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t))
 
 (customize-set-variable
  'package-selected-packages
- `(auctex
+ `(
+   auctex
+   bazel-mode
    color-theme-sanityinc-tomorrow
    company
    dockerfile-mode
-   erlang
    elgot
+   erlang
    expand-region
    gist
    git-gutter
@@ -35,10 +41,12 @@
    markdown-mode
    multiple-cursors
    powershell
+   protobuf-mode
    scad-mode
    smartparens
    web-beautify
-   yaml-mode))
+   yaml-mode
+   ))
 
 ;;;; Global Key Bindings
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -70,8 +78,8 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (and (file-exists-p custom-file) (load custom-file))
 
-(require 'smartparens-config)
-(with-eval-after-load "smartparens"
+(with-eval-after-load "smartparens-autoloads"
+  (require 'smartparens-config)
   (smartparens-global-mode 1))
 
 ;;;; UI
@@ -82,7 +90,7 @@
   (tool-bar-mode 0)
   (scroll-bar-mode 0))
 
-(when (or (version< "26.1" emacs-version) (display-graphic-p))
+(when (or (>= emacs-major-version 26) (display-graphic-p))
   (add-hook 'after-init-hook
             (lambda () (load-theme 'sanityinc-tomorrow-bright t))))
 
