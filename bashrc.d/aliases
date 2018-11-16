@@ -13,9 +13,10 @@ alias ls="ls --color=auto --file-type"
 alias ls='ls --color=auto'
 
 alias mv='mv -i'
-alias et="emacsclient -t"
-alias en="emacsclient -n"
-alias es="tmux split-pane emacsclient -t"
-#alias emacs='emacsclient -c -nw --alternate-editor="emacs"'
-export EDITOR="emacsclient --tty --alternate-editor \"\""
+alias et="emacsclient --tty"
+alias en="emacsclient --no-wait"
+alias es="tmux split-pane emacsclient --tty --no-wait"
+alias ecc="emacsclient -c -n"
+
+export EDITOR="emacsclient -t"
 export VISUAL="emacsclient --create-frame --no-wait --alternate-editor \"\""

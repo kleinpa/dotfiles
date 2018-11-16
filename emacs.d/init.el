@@ -1,51 +1,29 @@
-;;;; General
+;;;; Text Editor Settings
+(delete-selection-mode 1)
+(global-auto-revert-mode 1)
 (prefer-coding-system 'utf-8-unix)
-
 (setq vc-follow-symlinks t)
 (setq-default indent-tabs-mode nil)
 (setq inhibit-startup-message t)
+(setq disabled-command-function nil)
 (setq require-final-newline nil)
-(put 'eval-expression 'disabled nil)
-(put 'downcase-region 'disabled nil)
-(put 'upcase-region 'disabled nil)
-
-(xterm-mouse-mode 1)
-(global-auto-revert-mode 1)
-(delete-selection-mode 1)
-
-;; Show matching paren or bracket when cursor is on or after it
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 (show-paren-mode 1)
 (setq blink-matching-paren-distance nil)
 
-;; User Load Path
-(add-to-list 'load-path (concat user-emacs-directory
-                                (convert-standard-filename "lisp/")))
-(load "becls-scheme")
-
-;;;; Platform-specific Settings
-(when (eq system-type 'gnu/linux)
-  (set-default-font "Source Code Pro-10")
-    )
-(when (eq system-type 'windows-nt)
-  (setq explicit-cmdproxy.exe-args '("-- /q"))
-  (set-default-font "Consolas-10")
-  (setq exec-path (cons "c:/cygwin64/bin" exec-path))
-  (setenv "PATH" (concat "c:\\cygwin64\\bin;" (getenv "PATH")))
-  (setq process-coding-system-alist '(("bash" . undecided-unix)))
-  (setq shell-file-name "bash")
-  (setq explicit-shell-file-name "bash")
-  (setq w32-quote-process-args ?\"))
-  (setq w32-quote-process-args ?\")
-
 ;;;; Package Management
+(require 'package)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (package-initialize)
 
 (customize-set-variable
  'package-selected-packages
  `(auctex
    color-theme-sanityinc-tomorrow
+   company
    dockerfile-mode
    erlang
+   elgot
    expand-region
    gist
    git-gutter
@@ -57,12 +35,56 @@
    markdown-mode
    multiple-cursors
    powershell
-   projectile
    scad-mode
    smartparens
    web-beautify
-   yaml-mode
-   ))
+   yaml-mode))
+
+;;;; Global Key Bindings
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-c C-m") 'compile)
+
+;;;; IDE Settings
+
+;; Flyspell conflicts with company-mode :(
+;; https://github.com/company-mode/company-mode/issues/760
+;;   (add-hook 'text-mode-hook 'flyspell-mode)
+;;   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+
+;;;; Platform-specific Settings
+(defun try-set-default-font (name)
+  "Use specified font if available"
+  (cond ((find-font (font-spec :name name)) (set-default-font name))))
+
+(when (eq system-type 'gnu/linux)
+  (try-set-default-font "Source Code Pro-10"))
+
+(when (eq system-type 'windows-nt)
+  (try-set-default-font "Consolas-10"))
+
+;;;; Paths
+;; User Load Path
+(add-to-list 'load-path (concat user-emacs-directory
+                                (convert-standard-filename "lisp/")))
+;; Customize
+(setq custom-file "~/.emacs.d/custom.el")
+(and (file-exists-p custom-file) (load custom-file))
+
+(require 'smartparens-config)
+(with-eval-after-load "smartparens"
+  (smartparens-global-mode 1))
+
+;;;; UI
+(xterm-mouse-mode 1)
+(menu-bar-mode 0)
+
+(when (display-graphic-p)
+  (tool-bar-mode 0)
+  (scroll-bar-mode 0))
+
+(when (or (version< "26.1" emacs-version) (display-graphic-p))
+  (add-hook 'after-init-hook
+            (lambda () (load-theme 'sanityinc-tomorrow-bright t))))
 
 ;;;; Language Settings
 (defvar c-basic-offset 2)  ; for c++
@@ -71,26 +93,8 @@
 			(awk-mode . "awk")
 			(other . "bsd")))
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(with-eval-after-load "projectile-autoloads"
-  (projectile-global-mode))
-
-(with-eval-after-load "electric-autoloads"
-  (electric-indent-mode 1))
-
-(with-eval-after-load "smartparens-autoloads"
-  (smartparens-global-mode t)
-  (sp-local-pair '(scheme-mode emacs-lisp-mode) "'" nil :actions nil)
-  (sp-local-pair '(scheme-mode emacs-lisp-mode) "`" nil :actions nil))
-
-(with-eval-after-load "pretty-lambdada-autoloads"
-  (pretty-lambda-for-modes))
-
-(add-hook 'text-mode-hook 'flyspell-mode)
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
-
 ;; Scheme
+(load "becls-scheme")
 (add-to-list 'auto-mode-alist '("\\.ms$" . scheme-mode))
 (add-to-list 'auto-mode-alist '("\\.ss$" . scheme-mode))
 
@@ -125,41 +129,6 @@
 ;; Make
 (add-to-list 'auto-mode-alist '("\\/Mf-" . makefile-mode))
 
-;; Styles
-(menu-bar-mode 0)
-
-(when (display-graphic-p)
-  (tool-bar-mode 0)
-  (scroll-bar-mode 0))
-
-(unless (display-graphic-p)
-  (add-hook 'after-init-hook
-            (lambda () (load-theme 'sanityinc-tomorrow-bright t))))
-
-;;;; Global Key Bindings
-(global-set-key (kbd "<C-prior>") 'previous-buffer)
-(global-set-key (kbd "<C-next>") 'next-buffer)
-
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "C-c C-m") 'compile)
-
-(with-eval-after-load "multiple-cursors-autoloads"
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-  (global-set-key (kbd "C-S-c C-e") 'mc/edit-ends-of-lines)
-  (global-set-key (kbd "C-S-c C-a") 'mc/edit-beginnings-of-lines)
-  (global-set-key (kbd "M-.") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C->") 'mc/skip-to-next-like-this)
-  (global-set-key (kbd "M-,") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-<") 'mc/skip-to-previos-like-this)
-  (global-set-key (kbd "C-<return>") 'mc/mark-more-like-this-extended)
-  (global-set-key (kbd "C-S-SPC") 'set-rectangular-region-anchor)
-  (global-set-key (kbd "C-M-=") 'mc/insert-numbers)
-  (global-set-key (kbd "C-*") 'mc/mark-all-like-this)
-  (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click))
-
-(with-eval-after-load "expand-region-autoloads"
-    (global-set-key (kbd "C-=") 'er/expand-region))
-
 (with-eval-after-load "magit-autoloads"
   (global-set-key (kbd "C-x g") 'magit-status)
   (global-set-key (kbd "C-x G") 'magit-blame-mode))
@@ -168,29 +137,10 @@
   (set-face-attribute 'comint-highlight-prompt nil :inherit nil)
   (setq comint-process-echoes t))
 
-(with-eval-after-load "eshell"
-  (add-hook
-   'eshell-mode-hook
-   (lambda ()
-     (setq pcomplete-cycle-completions nil)))
-  (setq eshell-prompt-function
-	(lambda ()
-	  (format (propertize "%s@%s:%s%s" 'face `(:foreground "gray"))
-		   (propertize (user-login-name) 'face `(:foreground "dim gray"))
-		   (propertize (car (split-string (system-name) "\\.")) 'face `(:foreground "dim gray"))
-		   (propertize (file-name-base (eshell/pwd)) 'face `(:foreground "dim gray"))
-		   (propertize (if (= (user-uid) 0) "# " "$ ") 'face `(:foreground nil))
-		   )))
-  (setq eshell-prompt-regexp "\\.*?[$#] ")
-  (setq eshell-banner-message "")
-
-  (defun eshell/e (&rest args)
-    (mapc #'find-file (mapcar #'expand-file-name (eshell-flatten-list (reverse args)))))
-  (defun eshell/dc () "docker-compose up") )
-
-(global-set-key (kbd "C-c e") 'eshell)
-(global-set-key (kbd "C-c s") 'shell)
-
-;;;; Customize
-(setq custom-file "~/.emacs-custom.el")
-(and (file-exists-p custom-file) (load custom-file))
+;;;; IDE Features
+(with-eval-after-load "company-autoloads"
+  (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-tooltip-limit 20)                      ; bigger popup window
+  (setq company-idle-delay 0.2)                         ; decrease delay before autocompletion popup shows
+  (setq company-echo-delay 0)                          ; remove annoying blinking
+  (setq company-transformers '(company-sort-by-occurrence)))
