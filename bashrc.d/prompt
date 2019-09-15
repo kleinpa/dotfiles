@@ -1,27 +1,29 @@
+#!/bin/bash
+
 hue_to_ansi256() {
-    # map hue (from 0-1536) to saturated ansi256 color
-    h=$1
+  # map hue (from 0-1536) to saturated ansi256 color
+  h=$1
 
-    s=180
+  s=180
 
-    n=$(( ((h)/256)%6 ))
+  n=$(( ((h)/256)%6 ))
 
-    x=$((h%256))
-    y=$((256-x))
+  x=$((h%256))
+  y=$((256-x))
 
-    x=$((x*128/256))
-    y=$((y*128/256))
+  x=$((x*128/256))
+  y=$((y*128/256))
 
-    r=$(( (n==0? s   :(n==1? y   :(n==2? 0   :(n==3? 0   :(n==4? x   :(n==5? s   :0)))))) ))
-    g=$(( (n==0? x   :(n==1? s   :(n==2? s   :(n==3? y   :(n==4? 0   :(n==5? 0   :0)))))) ))
-    b=$(( (n==0? 0   :(n==1? 0   :(n==2? x   :(n==3? s   :(n==4? s   :(n==5? y   :0)))))) ))
+  r=$(( (n==0? s   :(n==1? y   :(n==2? 0   :(n==3? 0   :(n==4? x   :(n==5? s   :0)))))) ))
+  g=$(( (n==0? x   :(n==1? s   :(n==2? s   :(n==3? y   :(n==4? 0   :(n==5? 0   :0)))))) ))
+  b=$(( (n==0? 0   :(n==1? 0   :(n==2? x   :(n==3? s   :(n==4? s   :(n==5? y   :0)))))) ))
 
-    printf "%3d" $(((r<75?0:(r-35)/40)*6*6+(g<75?0:(g-35)/40)*6+(b<75?0:(b-35)/40)+16))
+  printf "%3d" $(((r<75?0:(r-35)/40)*6*6+(g<75?0:(g-35)/40)*6+(b<75?0:(b-35)/40)+16))
 }
 
 if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
-    . /usr/lib/git-core/git-sh-prompt
-    PS1_GIT="\$(__git_ps1)"
+  . /usr/lib/git-core/git-sh-prompt
+  PS1_GIT="\$(__git_ps1)"
 fi
 
 strToColor() {
@@ -30,40 +32,78 @@ strToColor() {
 
 HOST_KEY_COLOR="$(strToColor $(hostname))"
 
-build_prompt() {
-  section() {
-    FG=$1
-    BG=$2
+prompt_command() {
+    path="$(readlink -f .)"
 
-    if [ -n "$PREV_BG" ]; then
-      PS1+="\[$(tput setaf $PREV_BG)$(tput setab $BG)\] "
-    fi
+    unset PROMPT_DIR_BASE_DESC
 
-    PS1+="\[$(tput setaf $FG)$(tput setab $BG)\]$3"
+    while [[ "${path}" != / ]]; do
+        if [[ -z "${path}" ]]; then
+           PROMPT_DIR_BASE_DESC="bad-link"
+           return
+        fi
+        PROMPT_DIR_BASE="$(basename ${path})"
+        PROMPT_DIR_PATH="/$(realpath --relative-to="${path}" "$(readlink -f .)")"
+        PROMPT_DIR_PATH="${PROMPT_DIR_PATH%./}"
+        PROMPT_DIR_PATH="${PROMPT_DIR_PATH%/.}"
+        if [[ -d "${path}/.git" ]]; then
+          PROMPT_DIR_BASE_DESC="git:$(__git_ps1 '%s')"
+          return
+        fi
 
-    PREV_BG="$BG"
-  }
+        if [[ "${path}" == "$HOME" ]]; then
+          PROMPT_DIR_BASE="~"
+          unset PROMPT_DIR_BASE_DESC
+          return
+        fi
 
-  PREV_BG=""
-  PS1=""
+        if [[ -d "${path}/.citc" && -d "${path}"/.hg ]]; then
+          PROMPT_DIR_BASE="//depot"
+          PROMPT_DIR_BASE_DESC="fig:$(citc_name ${path})"
+          return
+        fi
+        if [[ -d "${path}/../.citc" && -d "${path}/../.hg" && "${path}" =~ .*/google3 ]]; then
+          PROMPT_DIR_BASE="g3"
+          PROMPT_DIR_BASE_DESC="fig:$(citc_name ${path})"
+          return
+        fi
 
-  if [ -n "${TMUX}" ] ; then
-      section 255 ${HOST_KEY_COLOR} ""
-  else
-      section 255 ${HOST_KEY_COLOR} "\u@\h"
-  fi
 
-  GIT_BRANCH="$(__git_ps1 '%s')"
+        if [[ -d "${path}/.citc" ]]; then
+          PROMPT_DIR_BASE="//depot"
+          PROMPT_DIR_BASE_DESC="citc:$(citc_name ${path})"
+          return
+        fi
+        if [[ -d "${path}/../.citc" &&  "${path}" =~ .*/google3 ]]; then
+          PROMPT_DIR_BASE="g3"
+          PROMPT_DIR_BASE_DESC="citc:$(citc_name ${path})"
+          return
+        fi
 
-  if [[ -n "${GIT_BRANCH}" ]]; then
-    VCS_ROOT="$(git rev-parse --show-toplevel)"
-    section 15 245 "${VCS_ROOT##*/}  ${GIT_BRANCH}"
-    section 15 238 ".${PWD/$VCS_ROOT/}"
-  else
-    section 15 238 "\W"
-  fi
 
-  PS1+="\[$(tput sgr0)$(tput setaf $PREV_BG)\]\[$(tput sgr0)\] "
+        if [[ "${path}" =~ ^/google/src/files/.*/depot$ ]]; then
+          PROMPT_DIR_BASE="//depot"
+          PROMPT_DIR_BASE_DESC="${path#/google/src/files/}"
+          PROMPT_DIR_BASE_DESC="cl:${PROMPT_DIR_BASE_DESC%%/*}"
+          return
+        fi
+        path="$(realpath -s "${path}/..")"
+    done
+
+    PROMPT_DIR_BASE=""
+    PROMPT_DIR_PATH="$PWD"
+
 }
+export PROMPT_COMMAND="prompt_command"
 
-PROMPT_COMMAND="build_prompt"
+PS1=""
+
+if [[ -z "$TMUX" ]]; then
+  PS1+="\[$(tput setaf 15)$(tput setab ${HOST_KEY_COLOR})\]\u@\h"
+  PS1+="\[$(tput setab 238)\] "
+fi
+
+PS1+="\[$(tput setaf 15)$(tput setab 238)\]\${PROMPT_DIR_BASE_DESC+}\${PROMPT_DIR_BASE_DESC}\${PROMPT_DIR_BASE_DESC+ }"
+PS1+="\[$(tput setaf 243)$(tput setab 238)\]\${PROMPT_DIR_BASE}"
+PS1+="\[$(tput setaf 15)$(tput setab 238)\]\${PROMPT_DIR_PATH} "
+PS1+="\[$(tput setab ${HOST_KEY_COLOR})\]\$\[$(tput sgr0)\] "
