@@ -1,6 +1,6 @@
 ;;;; Text Editor Settings
-(delete-selection-mode 1)
-(global-auto-revert-mode 1)
+(delete-selection-mode t)
+(global-auto-revert-mode t)
 (prefer-coding-system 'utf-8-unix)
 (setq vc-follow-symlinks t)
 (setq-default indent-tabs-mode nil)
@@ -13,6 +13,8 @@
 
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
+
+(setq sentence-end-double-space nil)
 
 ;;;; Package Management
 (when (>= emacs-major-version 24)
@@ -51,6 +53,9 @@
 ;;;; Global Key Bindings
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-c C-m") 'compile)
+
+(with-eval-after-load "expand-region-autoloads"
+  (global-set-key (kbd "C-q") 'er/expand-region))
 
 ;;;; IDE Settings
 
@@ -101,6 +106,11 @@
 			(awk-mode . "awk")
 			(other . "bsd")))
 
+;; C++
+(load "google-c-style")
+(add-hook 'c-mode-common-hook 'google-set-c-style)
+(add-hook 'c-mode-common-hook 'google-make-newline-indent)
+
 ;; Scheme
 (load "becls-scheme")
 (add-to-list 'auto-mode-alist '("\\.ms$" . scheme-mode))
@@ -110,6 +120,7 @@
 (global-set-key "!" 'run-scheme)
 
 ;; Javascript
+(defvar typescript-indent-level 2)
 (defvar js-indent-level 2)
 
 (with-eval-after-load "js2-mode-autoloads"
@@ -132,6 +143,7 @@
 
 ;; Shell
 (add-to-list 'auto-mode-alist '("\\.?*shrc$" . sh-mode))
+(add-to-list 'auto-mode-alist '("\\.?*shrc.d/" . sh-mode))
 (add-to-list 'auto-mode-alist '("\*profile$" . sh-mode))
 
 ;; Make
@@ -146,9 +158,8 @@
   (setq comint-process-echoes t))
 
 ;;;; IDE Features
-(with-eval-after-load "company-autoloads"
+(with-eval-after-load 'company
   (add-hook 'after-init-hook 'global-company-mode)
   (setq company-tooltip-limit 20)                      ; bigger popup window
-  (setq company-idle-delay 0.2)                         ; decrease delay before autocompletion popup shows
-  (setq company-echo-delay 0)                          ; remove annoying blinking
-  (setq company-transformers '(company-sort-by-occurrence)))
+  (global-set-key (kbd "C-t") 'company-complete)
+  )

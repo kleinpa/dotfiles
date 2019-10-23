@@ -1,6 +1,7 @@
 hash -d p=~/projects/
 
 alias ssh='TERM="${TERM/tmux/xterm}" ssh'
+alias gcloud='TERM="${TERM/tmux/xterm}" gcloud'
 
 alias cp='cp -i'
 alias e='$EDITOR'
