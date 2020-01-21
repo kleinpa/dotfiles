@@ -10,6 +10,7 @@ BASIC_LINK=(
     .bashrc.d/common
     .bashrc.d/history
     .bashrc.d/prompt
+    .bin/sshtm
     .bin/hash_color
     .emacs.d/init.el
     .emacs.d/lisp

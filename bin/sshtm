@@ -1,0 +1,6 @@
+#!/bin/bash -ue
+
+host=${1}
+shift || true
+
+ssh ${host} -A -t "ln -sf ${SSH_AUTH_SOCK} ~/.ssh/recent_auth && tmux new -A -s main" $@
