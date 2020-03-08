@@ -157,6 +157,11 @@
   (set-face-attribute 'comint-highlight-prompt nil :inherit nil)
   (setq comint-process-echoes t))
 
+(with-eval-after-load "bazel-mode"
+  (add-to-list 'auto-mode-alist '("/BUILD\\(\\..*\\)?\\'" . bazel-mode))
+  (add-to-list 'auto-mode-alist '("/WORKSPACE\\'" . bazel-mode))
+  (add-to-list 'auto-mode-alist '("\\.\\(BUILD\\|WORKSPACE\\|bzl\\)\\'" . bazel-mode)))
+
 ;;;; IDE Features
 (with-eval-after-load 'company
   (add-hook 'after-init-hook 'global-company-mode)
