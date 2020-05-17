@@ -9,6 +9,7 @@ BASIC_LINK=(
     .bashrc.d/aliases
     .bashrc.d/common
     .bashrc.d/history
+    .bashrc.d/path
     .bashrc.d/prompt
     .bin/sshtm
     .bin/hash_color

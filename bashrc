@@ -2,7 +2,7 @@
 [ -z "$PS1" ] && return
 
 if [ -d ~/.bashrc.d ]; then
-    for file in $(/bin/ls ~/.bashrc.d/*); do
+    for file in $(/bin/ls ~/.bashrc.d/*[^~]); do
         . $file;
     done
 fi
