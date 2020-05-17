@@ -17,6 +17,7 @@
 (setq sentence-end-double-space nil)
 
 ;;;; Package Management
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (when (>= emacs-major-version 24)
   (require 'package)
   (package-initialize)
