@@ -15,8 +15,29 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# To access SSH_AUTH_SOCK from tmux, a layer of indirection is
+# required. Incoming SSH sessions should call `ln -sf ${SSH_AUTH_SOCK}
+# ~/.ssh/recent_auth` so that the most recent SSH_AUTH_SOCK is always
+# accessable at a well known location. This does mean that the link
+# may break when you have multiple incoming connections, but simply
+# reconnecting will always fix the issue.
+#
+# ssh -A -t "ln -sf ${SSH_AUTH_SOCK} ~/.ssh/recent_auth && tmux new -A -s main"
+#
 if [[ -S "$HOME/.ssh/recent_auth" && -n "$TMUX" ]]; then
   export SSH_AUTH_SOCK=$HOME/.ssh/recent_auth
 fi
+
+ssht() {
+    if [ ! -z "$@" ] ; then
+        host=$1
+        shift
+        rest=$@
+        ssh -A -t $host "ln -sf ${SSH_AUTH_SOCK} ~/.ssh/recent_auth && tmux new -As main" $rest
+    else
+        tmux new -A -s main
+    fi
+
+}
 
 stty -ixon -ixoff
