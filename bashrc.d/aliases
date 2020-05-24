@@ -31,3 +31,5 @@ alias duh='du -hs * | sort -h'
 # tmux aliases
 alias tm="tmux"
 alias tmr="tmux rename-window"
+
+alias ibazel="npx @bazel/ibazel"
