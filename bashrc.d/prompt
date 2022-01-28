@@ -30,7 +30,7 @@ strToColor() {
   echo "$(hue_to_ansi256 $(( $(cksum <<< ${1} | cut -f 1 -d ' ') % 1280 + 128)))"
 }
 
-HOST_KEY_COLOR="$(strToColor $(hostname))"
+HOST_KEY_COLOR="$(strToColor $(hostname -s))"
 
 prompt_command() {
     path="$(readlink -f .)"
