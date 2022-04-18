@@ -20,7 +20,7 @@
 	p = push
 	ac = !git add -A && git commit
 	pr = pull --rebase
-	oops = commit --amend --no-edit
+	amend = commit --amend --no-edit
         e = commit --amend --no-edit
 	g = grep --break --heading --line-number
     	fresh = !git clean -fxd && git checkout -- .
