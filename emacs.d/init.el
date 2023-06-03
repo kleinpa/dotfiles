@@ -16,6 +16,8 @@
 
 (setq sentence-end-double-space nil)
 
+;(add-to-list 'term-file-aliases '("foot" . "xterm"))
+
 ;;;; Package Management
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (when (>= emacs-major-version 24)
@@ -96,9 +98,7 @@
   (tool-bar-mode 0)
   (scroll-bar-mode 0))
 
-(when (or (>= emacs-major-version 26) (display-graphic-p))
-  (add-hook 'after-init-hook
-            (lambda () (load-theme 'sanityinc-tomorrow-bright t))))
+(custom-set-variables '(custom-enabled-themes '(sanityinc-tomorrow-bright)))
 
 ;;;; Language Settings
 (defvar c-basic-offset 2)  ; for c++
