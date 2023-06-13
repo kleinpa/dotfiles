@@ -1,2 +1,12 @@
+CanonicalizeHostname yes
+CanonicalDomains 30eg.net kleinpa.net
+
+Host halite.30eg.net
+     User peterklein
+
 Host *
      User kleinpa
+
+Host switch-xk4.30eg.net
+     HostName 192.168.0.10
+     ProxyJump router-j01.30eg.net
