@@ -1,13 +1,20 @@
-Host halite.30eg.net *.kleinpa.net
-    User peterklein
+CanonicalizeHostname yes
+CanonicalDomains 30eg.net kleinpa.net
 
-Host *
+Host rhodonite.30eg.net sphene.30eg.net jade.30eg.net spinel.30eg.net quartz.30eg.net zircon.30eg.net
     User kleinpa
 
 Host rhodonite.30eg.net
     ForwardAgent yes
 
 Host switch-xk4.30eg.net
+    User kleinpa
     HostName 192.168.0.10
     ProxyJump router-j01.30eg.net
     KexAlgorithms +diffie-hellman-group14-sha1
+
+Host *.kleinpa.net
+    User peterklein
+
+Host *.30eg.net
+    User peter
