@@ -206,10 +206,6 @@ function InDisabledRepository {
     return $false
 }
 
-function Enable-GitColors {
-    $env:TERM = 'cygwin'
-}
-
 function Get-AliasPattern($exe) {
    $aliases = @($exe) + @(Get-Alias | where { $_.Definition -eq $exe } | select -Exp Name)
    "($($aliases -join '|'))"

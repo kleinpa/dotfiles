@@ -1,5 +1,4 @@
 #Requires -Version 2.0
-# sublime: word_wrap false
 
 #==============================================================================
 # Ensure cleanup at exit. (Based on PowerTab.)
