@@ -21,15 +21,8 @@
 	ac = !git add -A && git commit
 	pr = pull --rebase
 	amend = commit --amend --no-edit
-        e = commit --amend --no-edit
-	g = grep --break --heading --line-number
-    	fresh = !git clean -fxd && git checkout -- .
-	ignored = !git ls-files -v | sed -n 's/^[[:lower:]] //p'
-	ignore = update-index --assume-unchanged
-	unignore = update-index --no-assume-unchanged
-	unignore-all = !git ignored | xargs git unignore
-	pk = cherry-pick
-	cfxd = "!git clean -fxdq; git submodule update --init --force --recursive; git submodule foreach --recursive 'git clean -fxd'"
+    g = grep --break --heading --line-number
+    cfxd = "!git clean -fxdq; git submodule update --init --force --recursive; git submodule foreach --recursive 'git clean -fxd'"
 	spell = "!f() { while [[ $(git rev-parse --short HEAD) != "$1*" ]]; do git commit --amend --no-edit; done; }; f"
 [push]
 	default = upstream

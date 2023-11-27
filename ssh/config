@@ -1,3 +1,5 @@
+Include config.d/*
+
 CanonicalizeHostname yes
 CanonicalDomains 30eg.net kleinpa.net
 

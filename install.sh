@@ -23,12 +23,6 @@ BASIC_LINK=(
     .ssh/config
     .tmux.conf
     .vimrc
-    .xinitrc
-    .Xresources
-    .Xresources
-    .zprofile
-    .zsh
-    .zshrc
 )
 
 command -v realpath >/dev/null 2>&1 || {

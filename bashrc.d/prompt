@@ -24,6 +24,9 @@ hue_to_ansi256() {
 if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
   . /usr/lib/git-core/git-sh-prompt
   PS1_GIT="\$(__git_ps1)"
+elif [[ -e /usr/share/git-core/contrib/completion/git-prompt.sh ]]; then
+  . /usr/share/git-core/contrib/completion/git-prompt.sh
+  PS1_GIT="\$(__git_ps1)"
 fi
 
 strToColor() {
