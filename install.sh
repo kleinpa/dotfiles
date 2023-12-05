@@ -1,28 +1,28 @@
 #!/bin/bash -ue
+cd $(dirname $0)
 
 # These files are directly linked in from the repository. The link source is the
 # file but without the first dot.
 
-BASIC_LINK=(
-    .bash_profile
-    .bashrc
-    .bashrc.d/aliases
-    .bashrc.d/common
-    .bashrc.d/history
-    .bashrc.d/path
-    .bashrc.d/prompt
-    .bin/sshtm
-    .bin/hash_color
-    .emacs.d/init.el
-    .emacs.d/lisp
-    .gitconfig
-    .gitignore.global
-    .inputrc
-    .minttyrc
-    .profile
-    .ssh/config
-    .tmux.conf
-    .vimrc
+LINK=(
+    bash_profile
+    bashrc
+    bashrc.d/aliases
+    bashrc.d/common
+    bashrc.d/history
+    bashrc.d/path
+    bashrc.d/prompt
+    bin/sshtm
+    bin/hash_color
+    emacs.d/init.el
+    emacs.d/lisp
+    gitconfig
+    gitignore.global
+    inputrc
+    profile
+    ssh/config
+    tmux.conf
+    vimrc
 )
 
 command -v realpath >/dev/null 2>&1 || {
@@ -30,23 +30,27 @@ command -v realpath >/dev/null 2>&1 || {
   exit 1;
 }
 
-SOURCE="$(realpath $(dirname $0))"
+log () {
+    echo "$(git config --get remote.origin.url):" $@ >&2
+}
 
-# Check that all link source files exist
-for f in ${BASIC_LINK[@]}; do
-  if [[ ! -r "${SOURCE}/${f##.}" ]]; then
-    echo "Source file for '${f}' does not exist in this directory" 1>&2
-    exit 1
-  fi
+for src in ${LINK[@]} ; do
+    src=$(realpath $src)
+  if [ ! -r $src ]; then log "can not read source file $src"; exit 1; fi
 done
 
-for f in ${BASIC_LINK[@]}; do
-  echo "Linking ${f}" 1>&2
-  [[ -d "$(dirname ~/${f})" ]] || mkdir -p "$(dirname ~/${f})"
-  ln -Tfs "${SOURCE}/${f##.}" "$HOME/${f}"
+for src in ${LINK[@]} ; do
+    # Add a '.' prefix to the link destination
+    dst=$HOME/.$(realpath --relative-to=$(pwd) $src)
+    src=$(realpath $src)
+
+    mkdir -p $(dirname $dst)
+    [ "$src" -ef "$dst" ] || ln -nfs $src $dst
+    log "~/$(realpath -s --relative-to=$HOME $dst) -> $(readlink $dst)"
 done
 
 # Miscellaneous
 
-echo "Creating empty ~/.hushlogin" 1>&2
-touch "${HOME}/.hushlogin"
+touch $HOME/.hushlogin
+log "~/.hushlogin (empty)"
+
