@@ -1,0 +1,251 @@
+# Read `man 5 sway` for a complete reference.
+
+# Variables
+
+set $mod Mod4 
+
+# Direction keys
+set $left j
+set $down k
+set $up l
+set $right Semicolon
+
+# Launcher
+set $menu wofi -I --show drun | xargs swaymsg exec --
+
+include /etc/sway/config-vars.d/*
+
+### Common Input configuration
+
+input "type:pointer" {
+    accel_profile "flat" 
+    pointer_accel 0
+}
+
+### Key bindings
+
+# Kill focused window
+bindsym $mod+Ctrl+Backspace kill
+
+# Start your launcher
+bindsym $mod+u exec $menu
+
+# Drag floating windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+# Despite the name, also works for non-floating windows.
+# Change normal to inverse to use left mouse button for resizing and right
+# mouse button for dragging.
+floating_modifier $mod normal
+
+# Reload the configuration file
+bindsym $mod+p reload
+
+# Exit sway (logs you out of your Wayland session)
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+# Move your focus around
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+# Move the focused window with the same, but add Shift
+bindsym $mod+Ctrl+$left move left
+bindsym $mod+Ctrl+$down move down
+bindsym $mod+Ctrl+$up move up
+bindsym $mod+Ctrl+$right move right
+
+# Toggle orientation for next window
+bindsym $mod+n splitt
+
+# Switch the current container between different layout styles
+bindsym $mod+i layout toggle split
+bindsym $mod+o layout tabbed
+
+# Make the current focus fullscreen
+bindsym $mod+h fullscreen
+
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+Ctrl+space floating toggle
+
+# Swap focus between the tiling area and the floating area
+bindsym $mod+space focus mode_toggle
+
+# Move focus to the parent container
+bindsym $mod+y focus parent
+
+# Scratchpad
+bindsym $mod+Ctrl+apostrophe move scratchpad
+bindsym $mod+apostrophe scratchpad show
+
+# Resizing containers:
+bindsym $mod+m resize shrink width 10px
+bindsym $mod+Comma resize grow height 10px
+bindsym $mod+Period resize shrink height 10px
+bindsym $mod+Slash resize grow width 10px
+
+# Moving workspaces:
+bindsym $mod+Alt+$right move workspace to output right
+bindsym $mod+Alt+$left move workspace to output left
+bindsym $mod+Alt+$down move workspace to output down
+bindsym $mod+Alt+$up move workspace to output up
+
+# Media Keys
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym --locked XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym --locked XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86MonBrightnessDown exec light -U 5
+bindsym XF86MonBrightnessUp exec light -A 5
+bindsym --locked XF86AudioPlay exec playerctl play-pause
+bindsym --locked XF86AudioNext exec playerctl next
+bindsym --locked XF86AudioPrev exec playerctl previous
+
+#
+# Workspaces
+#
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1 "
+set $ws2 "2 "
+set $ws3 "3 "
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# Switch to workspace
+bindsym $mod+q workspace number $ws1
+bindsym $mod+w workspace number $ws2
+bindsym $mod+e workspace number $ws3
+bindsym $mod+r workspace number $ws4
+bindsym $mod+t workspace number $ws5
+bindsym $mod+a workspace number $ws6
+bindsym $mod+s workspace number $ws7
+bindsym $mod+d workspace number $ws8
+bindsym $mod+f workspace number $ws9
+bindsym $mod+g workspace number $ws10
+
+# Move focused container to workspace
+bindsym $mod+Ctrl+q move container to workspace number $ws1
+bindsym $mod+Ctrl+w move container to workspace number $ws2
+bindsym $mod+Ctrl+e move container to workspace number $ws3
+bindsym $mod+Ctrl+r move container to workspace number $ws4
+bindsym $mod+Ctrl+t move container to workspace number $ws5
+bindsym $mod+Ctrl+a move container to workspace number $ws6
+bindsym $mod+Ctrl+s move container to workspace number $ws7
+bindsym $mod+Ctrl+d move container to workspace number $ws8
+bindsym $mod+Ctrl+f move container to workspace number $ws9
+bindsym $mod+Ctrl+g move container to workspace number $ws10
+
+# Switch to workspace
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+# Move focused container to workspace
+bindsym $mod+Ctrl+1 move container to workspace number $ws1
+bindsym $mod+Ctrl+2 move container to workspace number $ws2
+bindsym $mod+Ctrl+3 move container to workspace number $ws3
+bindsym $mod+Ctrl+4 move container to workspace number $ws4
+bindsym $mod+Ctrl+5 move container to workspace number $ws5
+bindsym $mod+Ctrl+6 move container to workspace number $ws6
+bindsym $mod+Ctrl+7 move container to workspace number $ws7
+bindsym $mod+Ctrl+8 move container to workspace number $ws8
+bindsym $mod+Ctrl+9 move container to workspace number $ws9
+bindsym $mod+Ctrl+0 move container to workspace number $ws10
+
+
+
+# Assign windows to workspaces
+assign [class="(?i)slack"] $ws3
+assign [class="(?i)obsidian"] $ws2
+assign [class="(?i)discord"] $ws3
+assign [class="(?i)steam"] $ws4
+
+#
+# Status Bar
+#
+
+# Read `man 5 sway-bar` for more information about this section.
+bar {
+    position top
+
+    # When the status_command prints a new line to stdout, swaybar updates.
+    # The default just shows the current date and time.
+    #status_command while date +'%Y-%m-%d %H:%M'; do sleep 1; done
+    swaybar_command waybar
+
+    colors {
+        statusline #ffffff
+        background #323232
+        inactive_workspace #32323200 #32323200 #5c5c5c
+    }
+}
+
+font RobotoMono Regular 9
+
+default_border pixel 2
+
+set $bg #17171700
+set $fg #eff1f5
+set $br #a0a0a0
+set $ia #232425
+
+client.focused          $br     $br     $fg     $bg       $br
+client.focused_inactive $bg     $bg     $fg     $bg       $bg
+client.unfocused        $bg     $bg     $fg     $bg       $bg
+client.background $bg
+
+
+#/--------|--------|--------|--------|--------|--------\                   /--------|--------|--------|--------|--------|--------\
+#|        | 1      | 2      | 3      | 4      | 5      |                   | parent | menu   | split  | tabs   |        | reload |
+#|--------|--------|--------|--------|--------|--------|                   |--------|--------|--------|--------|--------|--------|
+#|        | 6      | 7      | 8      | 9      | 10     |                   | full   |  left  | down   | up     | right  | scratch|
+#|--------|--------|--------|--------|--------|--------|                   |--------|--------|--------|--------|--------|--------|
+#|        |        |        |        |        |        |                   | splitt | resize | resize | resize | resize |        |
+#\--------|--------|--------|--------/--------|--------/--------\ /--------\--------|--------|--------|--------|--------|--------/
+#                                    |        |        |        | |        |        |  SWAY  |  ctrl-backspace is kill
+#                                    \--------|--------|--------/ \--------|--------|--------/
+
+for_window [app_id="pavucontrol"] floating enable, sticky enable, resize set width 550 px height 600px, move position cursor, move down 35
+
+### Output configuration
+
+output * bg #000000 solid_color
+
+output 'LG Electronics IPS231        211NDPH1W152' transform 270
+output 'Lenovo Group Limited T27hv-20 V3087CBZ' mode 2560x1440@74.780Hz
+
+set $laptop eDP-1
+bindswitch --reload --locked lid:on output $laptop disable
+bindswitch --reload --locked lid:off output $laptop enable
+
+#
+# Autostart
+#
+
+exec swayidle -w \
+         timeout 300 'swaylock -f' \
+         timeout 600 'swaymsg "output * dpms off"' \
+              resume 'swaymsg "output * dpms on"' \
+         before-sleep 'swaylock -f -c 000000'
+
+exec mako
+exec mpd
+
+exec firefox
+exec flatpak run com.discordapp.Discord
+
+#exec flatpak run md.obsidian.Obsidian

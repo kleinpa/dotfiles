@@ -23,6 +23,11 @@ LINK=(
     ssh/config
     tmux.conf
     vimrc
+    config/foot
+    config/mako
+    config/sway
+    config/waybar
+    config/wofi
 )
 
 command -v realpath >/dev/null 2>&1 || {
