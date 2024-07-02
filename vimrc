@@ -68,3 +68,28 @@ if has("gui_running")
     colorscheme solarized
     set guifont=Consolas:h11
 endif
+
+" Normal mode
+nmap ; <Right>
+nmap l <Up>
+nmap k <Down>
+nmap j <Left>
+nnoremap h ;
+
+" Visual mode
+vmap ; <Right>
+vmap l <Up>
+vmap k <Down>
+vmap j <Left>
+vnoremap h ;
+
+" Rebind the window-switching movements
+nnoremap <C-w>; <C-w>l
+nnoremap <C-w>l <C-w>k
+nnoremap <C-w>k <C-w>j
+nnoremap <C-w>j <C-w>h
+nnoremap <C-w>h <C-w>;
+
+nnoremap <C-w>j <C-w>h
+nnoremap <C-w><C-j> <C-w>h
+
