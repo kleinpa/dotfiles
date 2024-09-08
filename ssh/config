@@ -20,3 +20,6 @@ Host *.kleinpa.net
 
 Host *.30eg.net
     User peter
+
+Host *
+  IdentityAgent ~/.1password/agent.sock
