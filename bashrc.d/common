@@ -40,4 +40,8 @@ ssht() {
 
 }
 
+if [ -n $(command -v vim) ]; then
+    export EDITOR=vim
+fi
+
 stty -ixon -ixoff

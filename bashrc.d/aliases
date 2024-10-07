@@ -1,7 +1,7 @@
 hash -d p=~/projects/
 
-alias ssh='TERM="${TERM/tmux/xterm}" ssh'
-alias gcloud='TERM="${TERM/tmux/xterm}" gcloud'
+alias ssh='TERM=xterm ssh'
+alias gcloud='TERM=xterm gcloud'
 
 alias cp='cp -i'
 alias e='$EDITOR'
@@ -19,16 +19,11 @@ alias mv='mv -i'
 alias emacs="emacs -nw"
 alias et="emacsclient --tty"
 alias en="emacsclient --no-wait"
-alias es="tmux split-pane emacsclient --tty --no-wait"
 alias ecc="emacsclient -c -n"
 
-export EDITOR="emacsclient -t"
-export VISUAL="emacsclient --create-frame --no-wait --alternate-editor \"\""
-
-# Default to -h versions of commands  showing
+# Default to -h versions of commands 
 alias free='free -h'
 alias df='df -h'
-alias duh='du -hs * | sort -h'
 
 # tmux aliases
 alias tm="tmux"
