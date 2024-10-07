@@ -29,4 +29,5 @@ alias df='df -h'
 alias tm="tmux"
 alias tmr="tmux rename-window"
 
+alias b="bazel"
 alias ibazel="npx @bazel/ibazel"
