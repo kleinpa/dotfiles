@@ -12,6 +12,7 @@ set $right Semicolon
 
 # Launcher
 set $menu wofi -I --show drun | xargs swaymsg exec --
+set $lock 'swaylock -f -F -e'
 
 include /etc/sway/config-vars.d/*
 
@@ -81,10 +82,10 @@ bindsym $mod+Ctrl+apostrophe move scratchpad
 bindsym $mod+apostrophe scratchpad show
 
 # Resizing containers:
-bindsym $mod+m resize shrink width 10px
-bindsym $mod+Comma resize grow height 10px
-bindsym $mod+Period resize shrink height 10px
-bindsym $mod+Slash resize grow width 10px
+bindsym $mod+m resize shrink width 2ppt
+bindsym $mod+Comma resize grow height 2ppt
+bindsym $mod+Period resize shrink height 2ppt
+bindsym $mod+Slash resize grow width 2ppt
 
 # Moving workspaces:
 bindsym $mod+Alt+$right move workspace to output right
@@ -173,6 +174,8 @@ bindsym $mod+z exec ncmpcpp
 bindsym $mod+tab workspace next_on_output 
 bindsym $mod+Shift+tab workspace prev_on_output
 
+bindsym $mod+escape exec $lock 
+
 # /--------|--------|--------|--------|--------|--------\          
 # |        | 1      | 2      | 3      | 4      | 5      |          
 # |--------|--------|--------|--------|--------|--------|          
@@ -244,13 +247,19 @@ for_window [app_id="pavucontrol"] floating enable, sticky enable, resize set wid
 
 output * bg #000000 solid_color
 
+# swaymsg -t get_outputs
 
-# output 'LG Electronics LG TV SSCR2 0x01010101' scale 2
-output 'LG Electronics LG TV SSCR2 0x01010101' res 2560x1440@119.998Hz
-output 'LG Electronics IPS231        211NDPH1W152' transform 270
+# living room
+output 'LG Electronics LG TV SSCR2 0x01010101' res 2560x1440@119.998Hz scale 2
+
+# office work
 output 'Lenovo Group Limited T27hv-20 V3087CBZ' mode 2560x1440@74.780Hz
-
+# output 'LG Electronics IPS231        211NDPH1W152' transform 270
+output 'Dell Inc. DELL P2715Q 54KKD67JB6EL' res 3840x2160@29.981Hz scale 1.5
+# output 'Dell Inc. DELL P2715Q 54KKD67JB6EL' res 2560x1440@59.951Hz
+# office game
 output 'Microstep MPG321UX OLED ' res 3840x2160@119.999Hz scale 1.5
+
 
 set $laptop eDP-1
 bindswitch --reload --locked lid:on output $laptop disable
@@ -261,15 +270,16 @@ bindswitch --reload --locked lid:off output $laptop enable
 #
 
 exec swayidle -w \
-         timeout 300 'swaylock -f' \
+         timeout 300 $lock \
          timeout 600 'swaymsg "output * dpms off"' \
               resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -c 000000'
+         before-sleep $lock
 
-exec mako
-exec mpd
-
+exec mako # notification daemon
+exec mpd # music player
 exec firefox
 exec flatpak run com.discordapp.Discord
 
-#exec flatpak run md.obsidian.Obsidian
+# exec flatpak run md.obsidian.Obsidian
+# exec --no-startup-id gnome-keyring-daemon --start --components=pkcs12,secrets,ssh
+

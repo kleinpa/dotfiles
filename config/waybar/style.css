@@ -4,6 +4,9 @@
   font-size: 12px;
 }
 
+@define-color bg1 #444444;
+@define-color fg1 #ffffff;
+
 window#waybar {
   /* background-color: rgba(43, 48, 59, 0.5); */
   /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
@@ -90,9 +93,9 @@ button:hover {
 #scratchpad,
 #custom-clock,
 #mpd {
-  padding: 0 10px;
-  background-color: #444444;
-  color: #ffffff;
+  padding: 0 5px;
+  background-color: @bg1;
+  color: @fg1;
 }
 
 #window,
@@ -175,6 +178,7 @@ label:focus {
 #mpd {
   /* background-color: #888888; */
 }
+
 #mpd.playing {
   background-color: #008800;
 }
