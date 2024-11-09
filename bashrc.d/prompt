@@ -101,13 +101,13 @@ export PROMPT_COMMAND="prompt_command"
 
 PS1=""
 
-if [[ -n "$TMUX" ]]
-then
-  echo hi
-  # this is on tmux header so not needed here
-elif [[ "$USER" == "codespace" ]]
-then
+if [[ -n "$TMUX" ]]; then
+  true # skip
+elif [[ "$USER" == "codespace" ]]; then
   PS1+="\[$(tput setaf 15)$(tput setab ${HOST_KEY_COLOR})\]cs"
+  PS1+="\[$(tput setab 238)\] "
+elif [[ "$USER" == "vscode" ]]; then
+  PS1+="\[$(tput setaf 15)$(tput setab ${HOST_KEY_COLOR})\]vs"
   PS1+="\[$(tput setab 238)\] "
 else
   PS1+="\[$(tput setaf 15)$(tput setab ${HOST_KEY_COLOR})\]\u@\h"
