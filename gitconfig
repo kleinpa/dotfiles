@@ -5,6 +5,7 @@
 	editor = $GIT_EDITOR
 	excludesfile = ~/.gitignore.global
 	pager = less
+	autocrlf = false
 [color]
 	ui = true
 [alias]
