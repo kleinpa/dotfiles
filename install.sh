@@ -28,6 +28,8 @@ LINK=(
     config/sway
     config/waybar
     config/wofi
+    config/alacritty
+    config/nvim
 )
 
 command -v realpath >/dev/null 2>&1 || {
