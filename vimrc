@@ -1,105 +1,99 @@
-" FreeBSD security advisory for this one...
-set nomodeline
+" --- Essential Settings ---
 
-" This setting prevents vim from emulating the original vi's
-" bugs and limitations.
-set nocompatible
+set nocompatible    " Enable modern Vim features
+set nomodeline      " Security: ignore modelines in files
+filetype plugin indent on " Load filetype-specific plugins and indent rules
+syntax on           " Enable syntax highlighting
 
-" turn on syntax highlighting
-syntax on
-" Make it not as appaling on dark background
-highlight Comment ctermfg=Cyan term=NONE cterm=NONE
 
-" turn on line numbers, aww yeah
-set number
+" --- Editor Behavior ---
 
-" The first setting tells vim to use "autoindent" (that is, use the current
-" line's indent level to set the indent level of new lines). The second makes
-" vim attempt to intelligently guess the indent level of any new line based on
-" the previous line.
-set autoindent
-"set smartindent
+set number           " Show line numbers
+set ruler            " Always show cursor position
+set showcmd          " Display incomplete commands
+set history=1000     " Store a lot of command history
+set hidden           " Allow switching buffers without saving
+set mouse=a          " Enable mouse use in all modes
+set scrolloff=8      " Keep 8 lines of context above/below cursor
+set sidescrolloff=8  " Keep 8 columns of context left/right of cursor
+set signcolumn=yes   " Always show the sign column (prevents text shift)
 
-" I prefer 4-space tabs to 8-space tabs. The first setting sets up 4-space
-" tabs, and the second tells vi to use 4 spaces when text is indented (auto or
-" with the manual indent adjustmenters.)
-set tabstop=4
-set shiftwidth=4
-set expandtab
-set softtabstop=4
+set backspace=indent,eol,start " Allow backspace over everything
 
-" This setting will cause the cursor to very briefly jump to a 
-" brace/parenthese/bracket's "match" whenever you type a closing or 
-" opening brace/parenthese/bracket.
-"set showmatch
 
-" find as you type
-"set incsearch
+" --- Search Settings ---
 
-" make searches case-insensitive
-set ignorecase
-" unless they contain upper-case letters
-set smartcase
+set incsearch       " Find as you type (incremental search)
+set hlsearch        " Highlight all search matches
+set ignorecase      " Make all searches case-insensitive...
+set smartcase       " ...unless the search pattern contains an uppercase letter
 
-" have fifty lines of command-line (etc) history:
-set history=50
+" Add a mapping to easily clear search highlighting
+nnoremap <leader><space> :nohlsearch<CR>
 
-" This setting ensures that each window contains a statusline that displays the
-" current cursor position.
-set ruler
 
-" Display an incomplete command in the lower right corner of the Vim window
-set showcmd
+" --- Indentation Settings ---
 
-set bs=2
+set tabstop=4       " Number of spaces a <Tab> counts for
+set shiftwidth=4    " Number of spaces for auto-indent
+set expandtab       " Use spaces instead of actual tab characters
+set softtabstop=4   " Number of spaces <Tab> key inserts/deletes in insert mode
+set autoindent      " Copy indent from current line when starting a new line
 
-" It feels weird at first but is quite useful.
-"set virtualedit=all
-" tab navigation like firefox
-:nmap <C-S-tab> :tabprevious<CR>
-:nmap <C-tab> :tabnext<CR>
-:nmap <C-t> :tabnew<CR>
-:map <C-S-tab> :tabprevious<CR>
-:map <C-tab> :tabnext<CR>
-:map <C-t> :tabnew<CR>
 
-if has("gui_running")
-    set background=light
-    colorscheme solarized
-    set guifont=Consolas:h11
-endif
+" --- Command & Completion ---
 
-" Normal mode
-nmap ; <Right>
-nmap l <Up>
-nmap k <Down>
-nmap j <Left>
-nnoremap h ;
+set wildmenu        " Show a graphical menu for command-line completion
+set wildmode=longest:full,full " More advanced completion behavior
+set showmatch       " Briefly jump to matching bracket/brace
+set completeopt=menu,menuone,noselect " Better settings for autocompletion
+
+
+" --- File Management (Backups & Undo) ---
+
+" This creates a persistent undo history for all your files.
+try
+    set backupdir=~/.vim/backup
+    if !isdirectory(&backupdir)
+        call mkdir(&backupdir, "p", 0700)
+    endif
+
+    set directory=~/.vim/swap
+    if !isdirectory(&directory)
+        call mkdir(&directory, "p", 0700)
+    endif
+catch
+endtry
+
+nnoremap j <Left>
+nnoremap h ; 
 
 " Visual mode
-vmap ; <Right>
-vmap l <Up>
-vmap k <Down>
-vmap j <Left>
+vnoremap ; <Right>
+vnoremap l <Up>
+vnoremap k <Down>
+vnoremap j <Left>
 vnoremap h ;
 
-" Rebind the window-switching movements
-nnoremap <C-w>; <C-w>l
-nnoremap <C-w>l <C-w>k
-nnoremap <C-w>k <C-w>j
-nnoremap <C-w>j <C-w>h
-nnoremap <C-w>h <C-w>;
+" Your window-switching movements, mirrored
+nnoremap <C-w>; <C-w>l " Window Right
+nnoremap <C-w>l <C-w>k " Window Up
+nnoremap <C-w>k <C-w>j " Window Down
+nnoremap <C-w>j <C-w>h " Window Left
+nnoremap <C-w>h <C-w>; " Swap h and ;
 
-nnoremap <C-w>j <C-w>h
-nnoremap <C-w><C-j> <C-w>h
+" Your tab navigation (now non-recursive)
+nnoremap <C-S-tab> :tabprevious<CR>
+nnoremap <C-tab>   :tabnext<CR>
+nnoremap <C-t>     :tabnew<CR>
 
-" Triger `autoread` when files changes on disk
-" https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
-" https://vi.stackexchange.com/questions/13692/prevent-focusgained-autocmd-running-in-command-line-editing-mode
-autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
-  \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+" Also map in Insert mode for convenience
+inoremap <C-S-tab> <Esc>:tabprevious<CR>i
+inoremap <C-tab>   <Esc>:tabnext<CR>i
+inoremap <C-t>     <Esc>:tabnew<CR>i
 
-" Notification after file change
-" https://vi.stackexchange.com/questions/13091/autocmd-event-for-autoread
-autocmd FileChangedShellPost *
-  \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+" --- Style and Appearance ---
+
+if has('termguicolors')
+  set termguicolors
+endif
