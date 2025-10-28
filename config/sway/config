@@ -18,6 +18,10 @@ include /etc/sway/config-vars.d/*
 
 ### Common Input configuration
 
+input "type:touchpad" {
+    natural_scroll enabled
+}
+
 input "type:pointer" {
     accel_profile "flat"
     pointer_accel 0
