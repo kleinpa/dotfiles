@@ -1,5 +1,15 @@
 #!/bin/bash
 
+function citc_name() {
+  local wd=`pwd`
+  IFS="/"; local arr=($wd); unset IFS;
+  if [[ $wd == "/google/src/cloud/$USER"* ]] && [[ ${arr[5]} ]]; then
+    printf ${arr[5]}
+  fi
+  unset IFS
+}
+
+
 hue_to_ansi256() {
   # map hue (from 0-1536) to saturated ansi256 color
   h=$1
@@ -49,6 +59,7 @@ prompt_command() {
         PROMPT_DIR_PATH="/$(realpath --relative-to="${path}" "$(readlink -f .)")"
         PROMPT_DIR_PATH="${PROMPT_DIR_PATH%./}"
         PROMPT_DIR_PATH="${PROMPT_DIR_PATH%/.}"
+
         if [[ -d "${path}/.git" ]]; then
           PROMPT_DIR_BASE_DESC="git:$(__git_ps1 '%s')"
           return
@@ -59,6 +70,18 @@ prompt_command() {
           unset PROMPT_DIR_BASE_DESC
           return
         fi
+
+        if [[ -d "${path}/.citc" && -d "${path}"/.jj ]]; then
+          PROMPT_DIR_BASE="//depot"
+          PROMPT_DIR_BASE_DESC="jj:$(citc_name ${path})"
+          return
+        fi
+        if [[ -d "${path}/../.citc" && -d "${path}/../.jj" && "${path}" =~ .*/google3 ]]; then
+          PROMPT_DIR_BASE="g3"
+          PROMPT_DIR_BASE_DESC="jj:$(citc_name ${path})"
+          return
+        fi
+
 
         if [[ -d "${path}/.citc" && -d "${path}"/.hg ]]; then
           PROMPT_DIR_BASE="//depot"
@@ -71,7 +94,6 @@ prompt_command() {
           return
         fi
 
-
         if [[ -d "${path}/.citc" ]]; then
           PROMPT_DIR_BASE="//depot"
           PROMPT_DIR_BASE_DESC="citc:$(citc_name ${path})"
@@ -82,7 +104,6 @@ prompt_command() {
           PROMPT_DIR_BASE_DESC="citc:$(citc_name ${path})"
           return
         fi
-
 
         if [[ "${path}" =~ ^/google/src/files/.*/depot$ ]]; then
           PROMPT_DIR_BASE="//depot"
@@ -101,20 +122,21 @@ export PROMPT_COMMAND="prompt_command"
 
 PS1=""
 
-if [[ -n "$TMUX" ]]; then
-  true # skip
-elif [[ "$USER" == "codespace" ]]; then
-  PS1+="\[$(tput setaf 15)$(tput setab ${HOST_KEY_COLOR})\]cs"
-  PS1+="\[$(tput setab 238)\] "
-elif [[ "$USER" == "vscode" ]]; then
-  PS1+="\[$(tput setaf 15)$(tput setab ${HOST_KEY_COLOR})\]vs"
-  PS1+="\[$(tput setab 238)\] "
+if [[ -n "$TMUX" ]]
+then
+  true
+  # this is on tmux header so not needed here
+elif [[ "$USER" == "codespace" ]]
+then
+  PS1+="\[$(tput bold)$(tput setaf ${HOST_KEY_COLOR})\]cs "
+elif [[ "$TERM_PROGRAM" == "cider" ]]
+then
+  PS1+="\[$(tput bold)$(tput setaf ${HOST_KEY_COLOR})\]\h "
 else
-  PS1+="\[$(tput setaf 15)$(tput setab ${HOST_KEY_COLOR})\]\u@\h"
-  PS1+="\[$(tput setab 238)\] "
+  PS1+="\[$(tput bold)$(tput setaf ${HOST_KEY_COLOR})\]\u@\h "
 fi
 
-PS1+="\[$(tput setaf 15)$(tput setab 238)\]\${PROMPT_DIR_BASE_DESC+}\${PROMPT_DIR_BASE_DESC}\${PROMPT_DIR_BASE_DESC+ }"
-PS1+="\[$(tput setaf 243)$(tput setab 238)\]\${PROMPT_DIR_BASE}"
-PS1+="\[$(tput setaf 15)$(tput setab 238)\]\${PROMPT_DIR_PATH} "
-PS1+="\[$(tput setab ${HOST_KEY_COLOR})\]\$\[$(tput sgr0)\] "
+PS1+="\[$(tput setaf 15)\]\${PROMPT_DIR_BASE_DESC+}\${PROMPT_DIR_BASE_DESC}\${PROMPT_DIR_BASE_DESC+ }"
+PS1+="\[$(tput setaf 243)\]\${PROMPT_DIR_BASE}"
+PS1+="\[$(tput setaf 15)\]\${PROMPT_DIR_PATH} "
+PS1+="\[$(tput bold)$(tput setaf ${HOST_KEY_COLOR})\]\$\[$(tput sgr0)\] "
