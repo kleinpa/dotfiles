@@ -1,5 +1,3 @@
-hash -d p=~/projects/
-
 alias ssh='TERM=xterm ssh'
 alias gcloud='TERM=xterm gcloud'
 
@@ -21,7 +19,7 @@ alias et="emacsclient --tty"
 alias en="emacsclient --no-wait"
 alias ecc="emacsclient -c -n"
 
-# Default to -h versions of commands 
+# Default to -h versions of commands
 alias free='free -h'
 alias df='df -h'
 
