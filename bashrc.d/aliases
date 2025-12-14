@@ -1,23 +1,14 @@
-alias ssh='TERM=xterm ssh'
-alias gcloud='TERM=xterm gcloud'
-
 alias cp='cp -i'
+alias mv='mv -i'
 alias e='$EDITOR'
 alias ev='$VISUAL'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
-alias l='less'
 alias less='less -I'
-alias ll='ls -ahl'
 alias ls='ls --color=auto --file-type -h'
 
-alias mv='mv -i'
-
 alias emacs="emacs -nw"
-alias et="emacsclient --tty"
-alias en="emacsclient --no-wait"
-alias ecc="emacsclient -c -n"
 
 # Default to -h versions of commands
 alias free='free -h'
@@ -26,6 +17,6 @@ alias df='df -h'
 # tmux aliases
 alias tm="tmux"
 alias tmr="tmux rename-window"
+alias tmain="tmux new-session -A -s main"
 
-alias b="bazel"
 alias ibazel="npx @bazel/ibazel"
