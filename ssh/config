@@ -16,8 +16,5 @@ Host switch-68i.30eg.net switch-xk4.30eg.net
     HostkeyAlgorithms +ssh-rsa
     PubkeyAcceptedAlgorithms +ssh-rsa
 
-Host *.kleinpa.net
-    User peterklein
-
-Host *.30eg.net
+Host *.kleinpa.net *.30eg.net
     User peter
