@@ -11,24 +11,38 @@ function citc_name() {
 
 
 hue_to_ansi256() {
-  # map hue (from 0-1536) to saturated ansi256 color
-  h=$1
+  # Map hue (0-1536) to ANSI 256 color via OKLCH (L=0.68, C=0.16)
+  # OKLCH ensures perceptually uniform brightness across all hues,
+  # readable on both light and dark backgrounds.
+  awk -v h="$1" 'BEGIN {
+    pi = 3.14159265358979
+    L = 0.55; C = 0.3
+    H = h * 2 * pi / 1536
 
-  s=180
+    # OKLCH -> OKLab
+    a = C * cos(H); b = C * sin(H)
 
-  n=$(( ((h)/256)%6 ))
+    # OKLab -> LMS (cube-root space)
+    l_ = L + 0.3963377774*a + 0.2158037573*b
+    m_ = L - 0.1055613458*a - 0.0638541728*b
+    s_ = L - 0.0894841775*a - 1.2914855480*b
 
-  x=$((h%256))
-  y=$((256-x))
+    # Cube
+    l = l_*l_*l_; m = m_*m_*m_; s = s_*s_*s_
 
-  x=$((x*128/256))
-  y=$((y*128/256))
+    # LMS -> linear sRGB
+    r =  4.0767416621*l - 3.3077115913*m + 0.2309699292*s
+    g = -1.2684380046*l + 2.6097574011*m - 0.3413193965*s
+    b = -0.0041960863*l - 0.7034186147*m + 1.7076147010*s
 
-  r=$(( (n==0? s   :(n==1? y   :(n==2? 0   :(n==3? 0   :(n==4? x   :(n==5? s   :0)))))) ))
-  g=$(( (n==0? x   :(n==1? s   :(n==2? s   :(n==3? y   :(n==4? 0   :(n==5? 0   :0)))))) ))
-  b=$(( (n==0? 0   :(n==1? 0   :(n==2? x   :(n==3? s   :(n==4? s   :(n==5? y   :0)))))) ))
+    # Gamma (linear -> sRGB) + clamp
+    r = r > 0 ? r^(1/2.2) : 0; if (r > 1) r = 1
+    g = g > 0 ? g^(1/2.2) : 0; if (g > 1) g = 1
+    b = b > 0 ? b^(1/2.2) : 0; if (b > 1) b = 1
 
-  printf "%3d" $(((r<75?0:(r-35)/40)*6*6+(g<75?0:(g-35)/40)*6+(b<75?0:(b-35)/40)+16))
+    # sRGB -> ANSI 256 6x6x6 cube (index 16-231)
+    printf "%d", 16 + 36*int(r*5+0.5) + 6*int(g*5+0.5) + int(b*5+0.5)
+  }'
 }
 
 if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
@@ -40,7 +54,9 @@ elif [[ -e /usr/share/git-core/contrib/completion/git-prompt.sh ]]; then
 fi
 
 strToColor() {
-  echo "$(hue_to_ansi256 $(( $(cksum <<< ${1} | cut -f 1 -d ' ') % 1280 + 128)))"
+  # Range 300-1450 maps to ~70°-340°: yellow→green→cyan→blue→purple
+  # Avoids red/orange, reserving those hues for root.
+  echo "$(hue_to_ansi256 $(( $(cksum <<< ${1} | cut -f 1 -d ' ') % 1150 + 300)))"
 }
 
 HOST_KEY_COLOR="$(strToColor $(hostname -s))"
@@ -122,21 +138,27 @@ export PROMPT_COMMAND="prompt_command"
 
 PS1=""
 
+if [[ $EUID -eq 0 ]]; then
+  _USER_COLOR=196  # red
+else
+  _USER_COLOR=${HOST_KEY_COLOR}
+fi
+
 if [[ -n "$TMUX" ]]
 then
   true
   # this is on tmux header so not needed here
 elif [[ "$USER" == "codespace" ]]
 then
-  PS1+="\[$(tput bold)$(tput setaf ${HOST_KEY_COLOR})\]cs "
+  PS1+="\[$(tput bold)$(tput setaf ${_USER_COLOR})\]cs "
 elif [[ "$TERM_PROGRAM" == "cider" ]]
 then
-  PS1+="\[$(tput bold)$(tput setaf ${HOST_KEY_COLOR})\]\h "
+  PS1+="\[$(tput bold)$(tput setaf ${_USER_COLOR})\]\h "
 else
-  PS1+="\[$(tput bold)$(tput setaf ${HOST_KEY_COLOR})\]\u@\h "
+  PS1+="\[$(tput bold)$(tput setaf ${_USER_COLOR})\]\u@\h "
 fi
 
 PS1+="\[$(tput setaf 15)\]\${PROMPT_DIR_BASE_DESC+}\${PROMPT_DIR_BASE_DESC}\${PROMPT_DIR_BASE_DESC+ }"
 PS1+="\[$(tput setaf 243)\]\${PROMPT_DIR_BASE}"
 PS1+="\[$(tput setaf 15)\]\${PROMPT_DIR_PATH} "
-PS1+="\[$(tput bold)$(tput setaf ${HOST_KEY_COLOR})\]\$\[$(tput sgr0)\] "
+PS1+="\[$(tput bold)$(tput setaf ${_USER_COLOR})\]\$\[$(tput sgr0)\] "
