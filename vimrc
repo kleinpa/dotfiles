@@ -65,22 +65,33 @@ try
 catch
 endtry
 
-nnoremap j <Left>
-nnoremap h ; 
+" --- Navigation Rebinds (hjkl -> jkl;) ---
 
-" Visual mode
-vnoremap ; <Right>
-vnoremap l <Up>
-vnoremap k <Down>
-vnoremap j <Left>
+" Normal, Visual and Operator-pending mode navigation
+nnoremap j h
+nnoremap k j
+nnoremap l k
+nnoremap ; l
+nnoremap h ;
+
+vnoremap j h
+vnoremap k j
+vnoremap l k
+vnoremap ; l
 vnoremap h ;
 
-" Your window-switching movements, mirrored
-nnoremap <C-w>; <C-w>l " Window Right
-nnoremap <C-w>l <C-w>k " Window Up
-nnoremap <C-w>k <C-w>j " Window Down
-nnoremap <C-w>j <C-w>h " Window Left
-nnoremap <C-w>h <C-w>; " Swap h and ;
+onoremap j h
+onoremap k j
+onoremap l k
+onoremap ; l
+onoremap h ;
+
+" Window-switching movements
+nnoremap <C-w>j <C-w>h
+nnoremap <C-w>k <C-w>j
+nnoremap <C-w>l <C-w>k
+nnoremap <C-w>; <C-w>l
+nnoremap <C-w>h <C-w>;
 
 " Your tab navigation (now non-recursive)
 nnoremap <C-S-tab> :tabprevious<CR>
