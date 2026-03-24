@@ -1,12 +1,11 @@
 {
   "position": "top",
-  "height": 22,
+  "height": 24,
   "spacing": 2,
   "modules-left": [
     "sway/workspaces",
     "sway/mode",
     "sway/scratchpad",
-    "custom/media",
     "sway/window"
   ],
   "modules-center": [
@@ -21,6 +20,9 @@
     "battery",
     "tray"
   ],
+  "sway/workspaces": {
+    "swap-icon-label": false
+  },
   "sway/mode": {
     "format": " {}",
     "max-length": 50

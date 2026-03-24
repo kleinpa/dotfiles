@@ -2,7 +2,7 @@
 
 # Variables
 
-set $mod Mod4 
+set $mod Mod4
 
 # Direction keys
 set $left j
@@ -11,7 +11,7 @@ set $up l
 set $right Semicolon
 
 # Launcher
-set $menu wofi -I --show drun | xargs swaymsg exec --
+set $menu fuzzel
 set $lock 'swaylock -f -F -e'
 
 include /etc/sway/config-vars.d/*
@@ -19,7 +19,7 @@ include /etc/sway/config-vars.d/*
 ### Common Input configuration
 
 input "type:pointer" {
-    accel_profile "flat" 
+    accel_profile "flat"
     pointer_accel 0
 }
 
@@ -110,9 +110,9 @@ bindsym --locked XF86AudioPrev exec playerctl previous
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1 "
-set $ws2 "2 "
-set $ws3 "3 "
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
 set $ws4 "4"
 set $ws5 "5"
 set $ws6 "6"
@@ -171,20 +171,20 @@ bindsym $mod+Ctrl+0 move container to workspace number $ws10
 
 bindsym $mod+z exec ncmpcpp
 
-bindsym $mod+tab workspace next_on_output 
+bindsym $mod+tab workspace next_on_output
 bindsym $mod+Shift+tab workspace prev_on_output
 
-bindsym $mod+escape exec $lock 
+bindsym $mod+escape exec $lock
 
-# /--------|--------|--------|--------|--------|--------\          
-# |        | 1      | 2      | 3      | 4      | 5      |          
-# |--------|--------|--------|--------|--------|--------|          
-# |        | 6      | 7      | 8      | 9      | 10     |          
-# |--------|--------|--------|--------|--------|--------|          
-# |        |        |        |        |        |        |  left         
-# \--------|--------|--------|--------/--------|--------/--------\ 
-#                                     |        |        |        | 
-#                                     \--------|--------|--------/ 
+# /--------|--------|--------|--------|--------|--------\
+# |        | 1      | 2      | 3      | 4      | 5      |
+# |--------|--------|--------|--------|--------|--------|
+# |        | 6      | 7      | 8      | 9      | 10     |
+# |--------|--------|--------|--------|--------|--------|
+# |        |        |        |        |        |        |  left
+# \--------|--------|--------|--------/--------|--------/--------\
+#                                     |        |        |        |
+#                                     \--------|--------|--------/
 #
 #          /--------|--------|--------|--------|--------|--------\
 #          | parent | menu   | split  | tabs   |        | reload |
@@ -200,11 +200,6 @@ bindsym $mod+escape exec $lock
 # - is there any way to squeeze a mod key onto the left side of my keyboard?
 
 
-# Assign windows to workspaces
-assign [class="(?i)slack"] $ws3
-assign [class="(?i)obsidian"] $ws2
-assign [class="(?i)discord"] $ws3
-assign [class="(?i)steam"] $ws4
 
 #
 # Status Bar
@@ -260,6 +255,8 @@ output 'Dell Inc. DELL P2715Q 54KKD67JB6EL' res 3840x2160@29.981Hz scale 1.5
 # office game
 output 'Microstep MPG321UX OLED ' res 3840x2160@119.999Hz scale 1.5
 
+# surface go
+output 'Sharp Corporation LQ100P1JX51 Unknown' res 1800x1200@59.903Hz scale 1.5
 
 set $laptop eDP-1
 bindswitch --reload --locked lid:on output $laptop disable
@@ -269,17 +266,7 @@ bindswitch --reload --locked lid:off output $laptop enable
 # Autostart
 #
 
-exec swayidle -w \
-         timeout 300 $lock \
-         timeout 600 'swaymsg "output * dpms off"' \
-              resume 'swaymsg "output * dpms on"' \
-         before-sleep $lock
+exec swayidle -w timeout 300 $lock timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep $lock
 
 exec mako # notification daemon
 exec mpd # music player
-exec firefox
-exec flatpak run com.discordapp.Discord
-
-# exec flatpak run md.obsidian.Obsidian
-# exec --no-startup-id gnome-keyring-daemon --start --components=pkcs12,secrets,ssh
-
