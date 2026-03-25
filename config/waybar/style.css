@@ -4,14 +4,11 @@
   font-size: 12px;
 }
 
-@define-color bg1 #444444;
+@define-color bg1 rgba(255, 255, 255, 0.07);
 @define-color fg1 #ffffff;
 
 window#waybar {
-  /* background-color: rgba(43, 48, 59, 0.5); */
-  /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
-
-  background: transparent;
+  background: rgba(17, 17, 17, 0.7);
   color: #ffffff;
   transition-property: background-color;
   transition-duration: 0.5s;
@@ -40,32 +37,31 @@ window#waybar.chromium {
 }
 
 button {
-  /* Use box-shadow instead of border so the text isn't offset */
-  box-shadow: inset 0 -3px transparent;
-  /* Avoid rounded borders under each button name */
+  box-shadow: none;
   border: none;
-  border-radius: 0;
+  border-radius: 4px;
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 button:hover {
   background: inherit;
-  box-shadow: inset 0 -3px #ffffff;
+  box-shadow: none;
 }
 
 #workspaces button {
   padding: 0 5px;
-  background-color: transparent;
-  color: #ffffff;
+  margin: 2px 1px;
+  background-color: @bg1;
+  color: @fg1;
+  border-radius: 4px;
 }
 
 #workspaces button:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 #workspaces button.focused {
-  background-color: #64727d;
-  box-shadow: inset 0 3px #ffffff;
+  background-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
 }
 
 #workspaces button.urgent {
@@ -93,9 +89,11 @@ button:hover {
 #scratchpad,
 #custom-clock,
 #mpd {
-  padding: 0 5px;
+  padding: 0 6px;
+  margin: 2px 1px;
   background-color: @bg1;
   color: @fg1;
+  border-radius: 4px;
 }
 
 #window,

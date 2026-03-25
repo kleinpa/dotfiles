@@ -30,6 +30,11 @@ bindsym $mod+Ctrl+Backspace kill
 
 # Start your launcher
 bindsym $mod+u exec $menu
+bindsym $mod+BackSpace exec ~/.config/sway/scripts/power-menu.sh
+bindsym $mod+b exec ~/.config/sway/scripts/keymap.sh
+bindsym $mod+c exec ~/.config/sway/scripts/mpd-search.sh
+bindsym $mod+v exec networkmanager_dmenu
+bindsym $mod+x exec ~/.config/sway/scripts/audio-switch.sh
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
@@ -176,28 +181,8 @@ bindsym $mod+Shift+tab workspace prev_on_output
 
 bindsym $mod+escape exec $lock
 
-# /--------|--------|--------|--------|--------|--------\
-# |        | 1      | 2      | 3      | 4      | 5      |
-# |--------|--------|--------|--------|--------|--------|
-# |        | 6      | 7      | 8      | 9      | 10     |
-# |--------|--------|--------|--------|--------|--------|
-# |        |        |        |        |        |        |  left
-# \--------|--------|--------|--------/--------|--------/--------\
-#                                     |        |        |        |
-#                                     \--------|--------|--------/
-#
-#          /--------|--------|--------|--------|--------|--------\
-#          | parent | menu   | split  | tabs   |        | reload |
-#          |--------|--------|--------|--------|--------|--------|
-#          | full   |  left  | down   | up     | right  | scratch|
-#          |--------|--------|--------|--------|--------|--------|
-#   right  | splitt | resize | resize | resize | resize |        |
-# /--------\--------|--------|--------|--------|--------|--------/
-# | float  |        |  $mod  |      ctrl-backspace is kill
-# \--------|--------|--------/
-
-# remarks
-# - is there any way to squeeze a mod key onto the left side of my keyboard?
+# keymap lives in scripts/keymap.sh
+bindsym $mod+F1 exec ~/.config/sway/scripts/keymap.sh
 
 
 
@@ -224,6 +209,8 @@ bar {
 font RobotoMono Regular 9
 
 default_border pixel 2
+gaps inner 2
+gaps outer 2
 
 set $bg #17171700
 set $fg #eff1f5
@@ -248,15 +235,15 @@ output * bg #000000 solid_color
 output 'LG Electronics LG TV SSCR2 0x01010101' res 2560x1440@119.998Hz scale 2
 
 # office work
-output 'Lenovo Group Limited T27hv-20 V3087CBZ' mode 2560x1440@74.780Hz
+output 'Lenovo Group Limited T27hv-20 V3087CBZ' mode 2560x1440@74.780Hz pos 0 0
 # output 'LG Electronics IPS231        211NDPH1W152' transform 270
-output 'Dell Inc. DELL P2715Q 54KKD67JB6EL' res 3840x2160@29.981Hz scale 1.5
+output 'Dell Inc. DELL P2715Q 54KKD67JB6EL' res 3840x2160@29.981Hz scale 1.5 pos 2560 0
 # output 'Dell Inc. DELL P2715Q 54KKD67JB6EL' res 2560x1440@59.951Hz
 # office game
 output 'Microstep MPG321UX OLED ' res 3840x2160@119.999Hz scale 1.5
 
 # surface go
-output 'Sharp Corporation LQ100P1JX51 Unknown' res 1800x1200@59.903Hz scale 1.5
+output 'Sharp Corporation LQ100P1JX51 Unknown' res 1800x1200@59.903Hz scale 2
 
 set $laptop eDP-1
 bindswitch --reload --locked lid:on output $laptop disable

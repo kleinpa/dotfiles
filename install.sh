@@ -23,11 +23,11 @@ LINK=(
     ssh/config
     tmux.conf
     vimrc
-    config/foot
     config/mako
     config/sway
+    config/sway/scripts
     config/waybar
-    config/wofi
+    config/fuzzel/fuzzel.ini
     config/alacritty
     config/nvim
 )
