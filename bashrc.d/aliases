@@ -2,21 +2,26 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias e='$EDITOR'
 alias ev='$VISUAL'
+alias diff='diff --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
+alias watch='watch --color'
 alias less='less -I'
 alias ls='ls --color=auto --file-type -h'
-
-alias emacs="emacs -nw"
+export LESS='-R -I'
+export MANPAGER='less -R'
 
 # Default to -h versions of commands
 alias free='free -h'
 alias df='df -h'
+alias du='du -h'
 
 # tmux aliases
 alias tm="tmux"
 alias tmr="tmux rename-window"
 alias tmain="tmux new-session -A -s main"
 
-alias ibazel="npx @bazel/ibazel"
+if command -v npx &>/dev/null; then
+  alias ibazel="npx @bazel/ibazel"
+fi
