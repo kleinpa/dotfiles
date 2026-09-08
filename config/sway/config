@@ -33,12 +33,12 @@ input "type:pointer" {
 bindsym $mod+Ctrl+Backspace kill
 
 # Start your launcher
-bindsym $mod+u exec $menu
-bindsym $mod+BackSpace exec ~/.config/sway/scripts/power-menu.sh
-bindsym $mod+b exec ~/.config/sway/scripts/keymap.sh
-bindsym $mod+c exec ~/.config/sway/scripts/mpd-search.sh
-bindsym $mod+v exec networkmanager_dmenu
-bindsym $mod+x exec ~/.config/sway/scripts/audio-switch.sh
+bindsym $mod+u exec pkill -x $menu || $menu
+bindsym $mod+BackSpace exec pkill -x $menu || ~/.config/sway/scripts/power-menu.sh
+bindsym $mod+b exec pkill -x $menu || ~/.config/sway/scripts/keymap.sh
+bindsym $mod+c exec pkill -x $menu || ~/.config/sway/scripts/mpd-search.sh
+bindsym $mod+v exec pkill -x $menu || networkmanager_dmenu
+bindsym $mod+x exec pkill -x $menu || ~/.config/sway/scripts/audio-switch.sh
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
@@ -91,10 +91,10 @@ bindsym $mod+Ctrl+apostrophe move scratchpad
 bindsym $mod+apostrophe scratchpad show
 
 # Resizing containers:
-bindsym $mod+m resize shrink width 2ppt
-bindsym $mod+Comma resize grow height 2ppt
-bindsym $mod+Period resize shrink height 2ppt
-bindsym $mod+Slash resize grow width 2ppt
+bindsym $mod+m resize shrink width 5ppt
+bindsym $mod+Comma resize grow height 5ppt
+bindsym $mod+Period resize shrink height 5ppt
+bindsym $mod+Slash resize grow width 5ppt
 
 # Moving workspaces:
 bindsym $mod+Alt+$right move workspace to output right
@@ -180,8 +180,9 @@ bindsym $mod+Ctrl+0 move container to workspace number $ws10
 
 bindsym $mod+z exec ncmpcpp
 
-bindsym $mod+tab workspace next_on_output
-bindsym $mod+Shift+tab workspace prev_on_output
+bindsym $mod+Shift+$left workspace prev_on_output
+bindsym $mod+Shift+$right workspace next_on_output
+bindsym $mod+tab workspace back_and_forth
 
 bindsym $mod+escape exec $lock
 
