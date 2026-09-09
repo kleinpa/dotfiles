@@ -12,6 +12,7 @@ LINK=(
     bashrc.d/history
     bashrc.d/path
     bashrc.d/prompt
+    background
     bin/sshtm
     bin/hash_color
     emacs.d/init.el
@@ -25,9 +26,7 @@ LINK=(
     vimrc
     config/mako
     config/sway
-    config/sway/scripts
-    config/waybar
-    config/fuzzel/fuzzel.ini
+    config/quickshell
     config/alacritty
     config/nvim
 )
