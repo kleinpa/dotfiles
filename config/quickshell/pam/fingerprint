@@ -1,0 +1,5 @@
+# Fingerprint half of the lock screen, run in parallel with pam/password. No
+# timeout: the reader listens for as long as the lock screen is awake, and
+# Lock.qml stops it when the display goes off. Three misses end a round;
+# Lock.qml restarts it a bounded number of times.
+auth required pam_fprintd.so max-tries=3 timeout=-1

@@ -10,9 +10,10 @@ set $down k
 set $up l
 set $right Semicolon
 
-# Launcher
-set $menu fuzzel
-set $lock 'swaylock -f -F -e'
+# The lock screen lives in the quickshell config, not in swaylock. Keep the
+# quotes: sway strips them from an exec payload, and swayidle needs the whole
+# thing to arrive as a single argument.
+set $lock 'qs ipc call lock lock'
 
 include /etc/sway/config-vars.d/*
 
@@ -32,13 +33,18 @@ input "type:pointer" {
 # Kill focused window
 bindsym $mod+Ctrl+Backspace kill
 
-# Start your launcher
-bindsym $mod+u exec pkill -x $menu || $menu
-bindsym $mod+BackSpace exec pkill -x $menu || ~/.config/sway/scripts/power-menu.sh
-bindsym $mod+b exec pkill -x $menu || ~/.config/sway/scripts/keymap.sh
-bindsym $mod+c exec pkill -x $menu || ~/.config/sway/scripts/mpd-search.sh
-bindsym $mod+v exec pkill -x $menu || networkmanager_dmenu
-bindsym $mod+x exec pkill -x $menu || ~/.config/sway/scripts/audio-switch.sh
+bindsym $mod+Return exec alacritty
+
+# Menus. Each of these toggles itself, so pressing the key again dismisses it.
+# The launcher is on both $mod+u (top row, next to the other menus) and
+# $mod+space (thumb+thumb on the corne, Cmd/Alt+Space muscle memory).
+bindsym $mod+u exec qs ipc call launcher toggle
+bindsym $mod+space exec qs ipc call launcher toggle
+bindsym $mod+BackSpace exec qs ipc call power toggle
+bindsym $mod+b exec qs ipc call keymap toggle
+bindsym $mod+v exec qs ipc call network toggle
+bindsym $mod+x exec qs ipc call audio toggle
+bindsym $mod+c exec qs ipc call music toggle
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
@@ -49,11 +55,11 @@ floating_modifier $mod normal
 
 smart_borders on
 
-# Reload the configuration file
-bindsym $mod+p reload
+# No reload binding: it is in the power menu ($mod+BackSpace), and a rare
+# action does not earn an unmodified home-row key.
 
-# Exit sway (logs you out of your Wayland session)
-bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+# No exit binding: the power menu ($mod+BackSpace) has logout, and swaynag was
+# never packaged here, so this shortcut had been broken rather than guarded.
 
 # Move your focus around
 bindsym $mod+$left focus left
@@ -81,7 +87,7 @@ bindsym $mod+h fullscreen
 bindsym $mod+Ctrl+space floating toggle
 
 # Swap focus between the tiling area and the floating area
-bindsym $mod+space focus mode_toggle
+bindsym $mod+Shift+space focus mode_toggle
 
 # Move focus to the parent container
 bindsym $mod+y focus parent
@@ -102,16 +108,24 @@ bindsym $mod+Alt+$left move workspace to output left
 bindsym $mod+Alt+$down move workspace to output down
 bindsym $mod+Alt+$up move workspace to output up
 
-# Media Keys
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-bindsym --locked XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym --locked XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
-bindsym XF86MonBrightnessDown exec light -U 5
-bindsym XF86MonBrightnessUp exec light -A 5
-bindsym --locked XF86AudioPlay exec playerctl play-pause
-bindsym --locked XF86AudioNext exec playerctl next
-bindsym --locked XF86AudioPrev exec playerctl previous
+# Media keys. All of these go through the shell, which already tracks the
+# sinks and the active player, rather than through a separate CLI per key.
+bindsym XF86AudioRaiseVolume exec qs ipc call audio volumeUp
+bindsym XF86AudioLowerVolume exec qs ipc call audio volumeDown
+bindsym --locked XF86AudioMute exec qs ipc call audio mute
+bindsym --locked XF86AudioMicMute exec qs ipc call audio micMute
+bindsym XF86MonBrightnessDown exec qs ipc call brightness down
+bindsym XF86MonBrightnessUp exec qs ipc call brightness up
+bindsym --locked XF86AudioPlay exec qs ipc call media playPause
+bindsym --locked XF86AudioNext exec qs ipc call media next
+bindsym --locked XF86AudioPrev exec qs ipc call media prev
+
+# ThinkPad call-control cluster (Fn+F9..F12). These emit KEY_PICKUP_PHONE and
+# friends, which xkeyboard-config does map to real keysyms, so they need no
+# udev/keyd remapping -- they were only doing nothing because nothing was bound.
+bindsym --locked XF86PickupPhone exec qs ipc call media playPause
+bindsym --locked XF86HangupPhone exec qs ipc call media next
+bindsym --locked XF86LinkPhone exec qs ipc call media prev
 
 #
 # Workspaces
@@ -184,10 +198,14 @@ bindsym $mod+Shift+$left workspace prev_on_output
 bindsym $mod+Shift+$right workspace next_on_output
 bindsym $mod+tab workspace back_and_forth
 
-bindsym $mod+escape exec $lock
+# No lock binding: the power menu ($mod+BackSpace) opens with lock under the
+# cursor, so $mod+BackSpace, Enter does it. swayidle still uses $lock.
 
-# keymap lives in scripts/keymap.sh
-bindsym $mod+F1 exec ~/.config/sway/scripts/keymap.sh
+# Escape hatch: force every shell menu closed. If a menu ever holds an exclusive
+# keyboard grab, this releases it without killing the session.
+bindsym $mod+Shift+escape exec qs ipc call menus closeAll
+
+bindsym $mod+F1 exec qs ipc call keymap toggle
 
 
 
@@ -195,21 +213,8 @@ bindsym $mod+F1 exec ~/.config/sway/scripts/keymap.sh
 # Status Bar
 #
 
-# Read `man 5 sway-bar` for more information about this section.
-bar {
-    position top
-
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    #status_command while date +'%Y-%m-%d %H:%M'; do sleep 1; done
-    swaybar_command waybar
-
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
-}
+# No `bar` block: the bar is the quickshell config in config/quickshell, started
+# from the autostart section below.
 
 font RobotoMono Regular 9
 
@@ -228,10 +233,11 @@ client.unfocused        $bg     $bg     $fg     $bg       $bg
 client.background $bg
 
 
-for_window [app_id="pavucontrol"] floating enable, sticky enable, resize set width 550 px height 600px, move position cursor, move down 35
-
 ### Output configuration
 
+# No `output bg`: the wallpaper is a background layer-shell surface in the
+# quickshell config, so there is one mechanism rather than two disagreeing.
+# This black is only what shows in the moment before the shell starts.
 output * bg #000000 solid_color
 
 # swaymsg -t get_outputs
@@ -246,6 +252,7 @@ output 'Dell Inc. DELL P2715Q 54KKD67JB6EL' res 3840x2160@29.981Hz scale 1.5 pos
 # output 'Dell Inc. DELL P2715Q 54KKD67JB6EL' res 2560x1440@59.951Hz
 # office game
 output 'Microstep MPG321UX OLED ' res 3840x2160@119.999Hz scale 1.5
+output 'Microstep MPG321UX OLED 0x01010101' res 3840x2160@119.999Hz scale 1.5
 
 # surface go
 output 'Sharp Corporation LQ100P1JX51 Unknown' res 1800x1200@59.903Hz scale 2
@@ -258,7 +265,21 @@ bindswitch --reload --locked lid:off output $laptop enable
 # Autostart
 #
 
-exec swayidle -w timeout 300 $lock timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep $lock
+# The lock sleep/wake calls stop and restart the fingerprint reader: a verify
+# does not survive suspend, and holding the reader open to a dark room is
+# pointless. Harmless where there is no reader, or the screen is not locked.
+exec swayidle -w \
+    timeout 300 $lock \
+    timeout 600 'swaymsg "output * dpms off"; qs ipc call lock sleep' \
+    resume 'swaymsg "output * dpms on"; qs ipc call lock wake' \
+    before-sleep 'qs ipc call lock lock; qs ipc call lock sleep' \
+    after-resume 'qs ipc call lock wake'
 
+# QS_ICON_THEME: nothing on a bare sway session tells Qt which icon theme is
+# current, and without one the bar's symbolic icons resolve to nothing.
+exec QS_ICON_THEME=Adwaita quickshell # bar, menus and lock screen
 exec mako # notification daemon
-exec mpd # music player
+# No `exec mpd`: the systemd user service already runs it, and starting a
+# second one made the two fight over $XDG_RUNTIME_DIR/mpd/socket -- the stray
+# rebound the path, so clients using the socket reached an empty daemon while
+# clients using TCP reached the one actually playing.
