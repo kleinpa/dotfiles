@@ -4,7 +4,7 @@ CanonicalizeHostname yes
 CanonicalDomains 30eg.net kleinpa.net
 
 # migrations are slow
-Host rhodonite.30eg.net zircon.30eg.net
+Host zircon.30eg.net
     User kleinpa
 
 Host rhodonite.30eg.net
