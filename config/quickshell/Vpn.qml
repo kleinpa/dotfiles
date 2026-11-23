@@ -32,7 +32,9 @@ Singleton {
       onStreamFinished: {
         let parsed = [];
         try { parsed = JSON.parse(this.text || "[]"); } catch (e) {}
-        vpn.links = parsed.map(l => ({
+        // `ip -j ... type wireguard` still emits an empty {} for every interface
+        // the type filter rejects, so drop anything without a name.
+        vpn.links = parsed.filter(l => l.ifname).map(l => ({
           name: l.ifname,
           up: l.flags.includes("UP") && l.addr_info.some(a => a.scope === "global")
         }));

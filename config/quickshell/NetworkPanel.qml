@@ -39,33 +39,139 @@ Dropdown {
     anchors.margins: 10
     spacing: 6
 
-    // WireGuard links, read-only. These are systemd-networkd interfaces, not
-    // NetworkManager profiles: `nmcli connection down` on one deletes the
-    // adopted profile and drops the route this machine is administered over,
-    // so there is deliberately no toggle here.
-    property var vpns: []
+    // Split one line of `nmcli -t` output. Fields are ':'-separated, and a
+    // literal ':' or '\' inside a field (an ssid, a profile name) is escaped
+    // with a backslash.
+    function nmFields(line: string): var {
+      const out = [];
+      let cur = "";
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (c === "\\" && i + 1 < line.length) cur += line[++i];
+        else if (c === ":") { out.push(cur); cur = ""; }
+        else cur += c;
+      }
+      out.push(cur);
+      return out;
+    }
+
+    // NetworkManager devices: [{ name, type, state, connection }].
+    property var nmDevices: []
 
     Process {
-      id: vpnList
+      id: devList
       running: netMenu.wanted
-      command: [
-        "sh", "-c",
-        "for d in /sys/class/net/*/; do n=$(basename $d); " +
-        "grep -q DEVTYPE=wireguard \"$d/uevent\" 2>/dev/null || continue; " +
-        "st=$(networkctl list --no-legend 2>/dev/null | awk -v n=\"$n\" '$2==n {print $4}'); " +
-        "a=$(ip -o -6 addr show dev \"$n\" scope global 2>/dev/null | awk '{print $4}' | head -1); " +
-        "echo \"$n|$st|$a\"; done"
-      ]
+      command: ["nmcli", "-t", "-f", "DEVICE,TYPE,STATE,CONNECTION", "device"]
       stdout: StdioCollector {
         onStreamFinished: {
           const out = [];
           for (const line of this.text.split("\n")) {
-            const f = line.split("|");
-            if (f.length < 3 || f[0] === "") continue;
-            out.push({ name: f[0], state: f[1], address: f[2] });
+            if (line === "") continue;
+            const f = netBody.nmFields(line);
+            if (f.length < 4) continue;
+            out.push({ name: f[0], type: f[1], state: f[2], connection: f[3] });
           }
-          netBody.vpns = out;
+          netBody.nmDevices = out;
         }
+      }
+    }
+
+    // NetworkManager wireguard profiles: [{ name, uuid, device, state }].
+    // Inactive profiles have an empty device and state.
+    property var nmWireguard: []
+
+    Process {
+      id: conList
+      running: netMenu.wanted
+      command: ["nmcli", "-t", "-f", "NAME,UUID,TYPE,DEVICE,STATE", "connection", "show"]
+      stdout: StdioCollector {
+        onStreamFinished: {
+          const out = [];
+          for (const line of this.text.split("\n")) {
+            if (line === "") continue;
+            const f = netBody.nmFields(line);
+            if (f.length < 5 || f[2] !== "wireguard") continue;
+            out.push({ name: f[0], uuid: f[1], device: f[3], state: f[4] });
+          }
+          netBody.nmWireguard = out;
+        }
+      }
+    }
+
+    // Devices NetworkManager merely adopted from someone else, e.g. a
+    // systemd-networkd wireguard link. `nmcli connection down` on one of those
+    // deletes the in-memory profile NM made for it and tears the link down
+    // under its real owner -- on a machine administered over that link, that
+    // drops the session. So anything external is shown but never toggled.
+    readonly property var externalDevices:
+      netBody.nmDevices.filter(d => d.state.indexOf("externally") >= 0).map(d => d.name)
+
+    // Rows for the wireguard section: every NM profile, plus any wireguard
+    // link NM does not own at all (networkd on other machines), read-only.
+    readonly property var wgRows: {
+      const rows = netBody.nmWireguard.map(c => ({
+        key: "con:" + c.uuid,
+        name: c.name,
+        iface: c.device,
+        on: c.state === "activated",
+        busy: c.state === "activating" || c.state === "deactivating",
+        readOnly: netBody.externalDevices.indexOf(c.device) >= 0,
+        up: ["nmcli", "connection", "up", "uuid", c.uuid],
+        down: ["nmcli", "connection", "down", "uuid", c.uuid]
+      }));
+      const owned = netBody.nmWireguard.map(c => c.device);
+      for (const l of Vpn.links) {
+        if (owned.indexOf(l.name) >= 0) continue;
+        rows.push({ key: "link:" + l.name, name: l.name, iface: l.name,
+                    on: l.up, busy: false, readOnly: true, up: [], down: [] });
+      }
+      return rows;
+    }
+
+    // Rows for the ethernet section: only ports with a cable in. NM reports
+    // "unavailable" for no carrier and "unmanaged" for ports it leaves alone;
+    // bridges, docker and loopback are other device types and never get here.
+    readonly property var ethRows: netBody.nmDevices
+      .filter(d => d.type === "ethernet" && d.state !== "unavailable" && d.state !== "unmanaged")
+      .map(d => ({
+        key: "dev:" + d.name,
+        name: d.connection !== "" ? d.name + " (" + d.connection + ")" : d.name,
+        iface: d.name,
+        on: d.state.indexOf("connected") === 0,
+        busy: d.state.indexOf("connecting") === 0 || d.state === "deactivating"
+              || d.state.indexOf("prepare") === 0 || d.state.indexOf("config") === 0
+              || d.state.indexOf("getting") === 0,
+        readOnly: d.state.indexOf("externally") >= 0,
+        up: ["nmcli", "device", "connect", d.name],
+        down: ["nmcli", "device", "disconnect", d.name]
+      }))
+
+    // One toggle at a time; `pending` is the row key it belongs to, so that
+    // row can show progress while nmcli blocks on activation.
+    property string pending: ""
+
+    function toggle(row: var): void {
+      if (row.readOnly || nmAction.running) return;
+      netBody.pending = row.key;
+      nmAction.command = row.on ? row.down : row.up;
+      nmAction.running = true;
+    }
+
+    function refresh(): void {
+      devList.running = false;
+      devList.running = true;
+      conList.running = false;
+      conList.running = true;
+      addrList.running = false;
+      addrList.running = true;
+      Vpn.refresh();
+    }
+
+    Process {
+      id: nmAction
+      onExited: {
+        netBody.pending = "";
+        netBody.refresh();
       }
     }
 
@@ -108,20 +214,15 @@ Dropdown {
       interval: 3000
       running: netMenu.wanted
       repeat: true
-      onTriggered: {
-        vpnList.running = false;
-        vpnList.running = true;
-        addrList.running = false;
-        addrList.running = true;
-      }
+      onTriggered: netBody.refresh()
     }
 
-    // Wrapped so the whole section, including its spacing, collapses on
-    // machines with no wireguard link.
+    // Wrapped so the whole section, including its spacing, collapses when
+    // there is nothing to list.
     ColumnLayout {
       Layout.fillWidth: true
       spacing: 6
-      visible: netBody.vpns.length > 0
+      visible: netBody.wgRows.length > 0
 
       MonoText {
         text: "wireguard"
@@ -130,46 +231,13 @@ Dropdown {
       }
 
       Repeater {
-        model: netBody.vpns
-
-        ColumnLayout {
-          id: vpnRow
+        model: netBody.wgRows
+        ToggleRow {
           required property var modelData
-
-          Layout.fillWidth: true
-          spacing: 0
-
-          // "routable" means the link is up and carrying an address;
-          // "carrier" means the interface exists but has no usable address.
-          readonly property bool up: vpnRow.modelData.state === "routable"
-
-          RowLayout {
-            Layout.fillWidth: true
-            spacing: 6
-
-            MonoText {
-              Layout.fillWidth: true
-              elide: Text.ElideRight
-              text: vpnRow.modelData.name
-              color: vpnRow.up ? Theme.good : Theme.text
-              font.pixelSize: 11
-            }
-
-            MonoText {
-              text: vpnRow.modelData.state
-              color: vpnRow.up ? Theme.good : Theme.muted
-              font.pixelSize: 11
-            }
-          }
-
-          MonoText {
-            visible: vpnRow.modelData.address !== ""
-            Layout.fillWidth: true
-            elide: Text.ElideRight
-            text: vpnRow.modelData.address
-            color: Theme.muted
-            font.pixelSize: 10
-          }
+          row: modelData
+          pending: netBody.pending === modelData.key
+          addr: netBody.addrs[modelData.iface] || null
+          onToggled: netBody.toggle(modelData)
         }
       }
 
@@ -180,12 +248,10 @@ Dropdown {
       }
     }
 
-    // Wired. Net.wiredDevice is already filtered to a connected wired device,
-    // so this whole section is absent unless a cable is actually up.
     ColumnLayout {
       Layout.fillWidth: true
       spacing: 6
-      visible: Net.wiredDevice !== null
+      visible: netBody.ethRows.length > 0
 
       MonoText {
         text: "ethernet"
@@ -193,20 +259,14 @@ Dropdown {
         font.pixelSize: 11
       }
 
-      ColumnLayout {
-        Layout.fillWidth: true
-        spacing: 0
-
-        MonoText {
-          Layout.fillWidth: true
-          elide: Text.ElideRight
-          text: "> " + (Net.wiredDevice ? Net.wiredDevice.name : "")
-          color: Theme.good
-          font.pixelSize: 11
-        }
-
-        AddressLines {
-          addr: Net.wiredDevice ? netBody.addrs[Net.wiredDevice.name] : null
+      Repeater {
+        model: netBody.ethRows
+        ToggleRow {
+          required property var modelData
+          row: modelData
+          pending: netBody.pending === modelData.key
+          addr: netBody.addrs[modelData.iface] || null
+          onToggled: netBody.toggle(modelData)
         }
       }
 
@@ -228,6 +288,9 @@ Dropdown {
       }
 
       MonoText {
+        // Inset to line up with the on/off column of the rows below, which
+        // sit inside a hover highlight with 6px padding.
+        Layout.rightMargin: 6
         text: Networking.wifiEnabled ? "on" : "off"
         color: Networking.wifiEnabled ? Theme.good : Theme.muted
         font.pixelSize: 11
